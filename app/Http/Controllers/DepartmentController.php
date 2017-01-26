@@ -25,7 +25,7 @@ class DepartmentController extends Controller
      */
     public function create()
     {
-        return view('form/department');
+        return view('forms/department');
     }
 
     /**
@@ -36,7 +36,8 @@ class DepartmentController extends Controller
      */
     public function store(Request $request)
     {
-        
+        Department::create($request->all());
+        return redirect("/department");
     }
 
     /**
