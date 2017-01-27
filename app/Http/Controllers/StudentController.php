@@ -49,7 +49,7 @@ class StudentController extends Controller
                         'nim'           => $request->nim,
                         'name'          => $request->name,
                         'gender'        => $request->gender,
-                        'dob'           => date('Y-m-d',strtotime($request->birthdate)),
+                        'dob'           => date('Y-m-d',strtotime($request->dob)),
                         'email'         => $request->email,
                         'religion'      => $request->religion,
                         'department_id' => $request->department,
