@@ -28,6 +28,7 @@
                                   <th>Email</th>
                                   <th>Religion</th>
                                   <th>Class</th>
+                                  <th>Action</th>
 				                        </tr>
                       				</thead>
                       				<tbody>
@@ -36,10 +37,23 @@
 				                          <td>{{ $student->nim  }}</td>
 				                          <td>{{ $student->name }}</td>
 				                          <td>{{ $student->gender == 0 ? 'Male' : 'Female' }}</td>
-				                          <td>{{ $student->birthdate->format('d m Y') }}</td>
+				                          <td>{{ $student->dob->format('d M Y') }}</td>
 				                          <td>{{ $student->email }}</td>
                                   <td>{{ $student->religion }}</td>
                                   <td>{{ $student->classname }}</td>
+                                  <td class="center">
+                                    <a id="edit" class="btn btn-info" 
+                                     href="/student/{{ $student->id }}">
+                                        <i class="glyphicon glyphicon-edit icon-white"></i>
+                                        Edit
+                                    </a>
+                                    <button type="button" class="btn btn-danger"
+                                     onclick="javascript:checkDelete({{ $student->id }});" 
+                                     data-token="{{ csrf_token() }}">
+                                        <i class="glyphicon glyphicon-trash icon-white"></i>
+                                        Delete
+                                    </a>
+                                  </td>
 				                        </tr>  
                               @endforeach
 				                      </tbody>
