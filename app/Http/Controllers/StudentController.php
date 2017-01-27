@@ -25,7 +25,11 @@ class StudentController extends Controller
      */
     public function create()
     {
-        //
+        $departments = Department::all();
+        $classes = DB::table('students')->select('classname')->distinct()->get();
+        return view('form/student')->with("student", null)
+                                   ->with('departments', $departments)
+                                   ->with('classes', $classes);
     }
 
     /**
