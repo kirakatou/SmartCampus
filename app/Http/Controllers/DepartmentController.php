@@ -25,7 +25,7 @@ class DepartmentController extends Controller
      */
     public function create()
     {
-        return view('forms/department');
+        return view('forms/department')->with("department", null);
     }
 
     /**
@@ -48,6 +48,8 @@ class DepartmentController extends Controller
      */
     public function show($id)
     {
+        $department = Department::findOrFail($id);
+        return view('forms/department', compact('department'));
         //
     }
 
@@ -59,7 +61,8 @@ class DepartmentController extends Controller
      */
     public function edit($id)
     {
-        //
+        $department = Department::findOrFail($id);
+        return view('forms/department')->with("department", $department);;
     }
 
     /**
@@ -71,6 +74,9 @@ class DepartmentController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $department = Department::findOrFail($id);
+        $department->fill($request->all())->save();
+        return redirect("/department");
         //
     }
 
@@ -82,6 +88,8 @@ class DepartmentController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $department = Department::findOrFail($id);
+        $department->delete();
+        return redirect("/department");
     }
 }
