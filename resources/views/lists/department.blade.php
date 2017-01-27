@@ -23,93 +23,35 @@
 				                        <tr>
 				                          <th>Name</th>
 				                          <th>Alias</th>
+				                          <th>Action</th>
 				                        </tr>
                       				</thead>
                       				<tbody>
-				                        <tr>
-				                          <td>Tiger Nixon</td>
-				                          <td>System Architect</td>
-				                        </tr>  
-				                        <tr>
-				                          <td>Dai Rios</td>
-				                          <td>Personnel Lead</td>
-				                        </tr>
-				                        <tr>
-				                          <td>Jenette Caldwell</td>
-				                          <td>Development Lead</td>
-				                        </tr>                        
-				                        <tr>
-				                          <td>Michael Bruce</td>
-				                          <td>Javascript Developer</td>
-				                        </tr>
-				                        <tr>
-				                          <td>Donna Snider</td>
-				                          <td>Customer Support</td>
-				                        </tr>
-				                        <tr>
-				                          <td>Tiger Nixon</td>
-				                          <td>System Architect</td>
-				                        </tr>  
-				                        <tr>
-				                          <td>Dai Rios</td>
-				                          <td>Personnel Lead</td>
-				                        </tr>
-				                        <tr>
-				                          <td>Tiger Nixon</td>
-				                          <td>System Architect</td>
-				                        </tr>  
-				                        <tr>
-				                          <td>Dai Rios</td>
-				                          <td>Personnel Lead</td>
-				                        </tr>
-				                        <tr>
-				                          <td>Jenette Caldwell</td>
-				                          <td>Development Lead</td>
-				                        </tr>                        
-				                        <tr>
-				                          <td>Michael Bruce</td>
-				                          <td>Javascript Developer</td>
-				                        </tr>
-				                        <tr>
-				                          <td>Donna Snider</td>
-				                          <td>Customer Support</td>
-				                        </tr>
-				                        <tr>
-				                          <td>Tiger Nixon</td>
-				                          <td>System Architect</td>
-				                        </tr>  
-				                        <tr>
-				                          <td>Dai Rios</td>
-				                          <td>Personnel Lead</td>
-				                        </tr>
-				                        <tr>
-				                          <td>Tiger Nixon</td>
-				                          <td>System Architect</td>
-				                        </tr>  
-				                        <tr>
-				                          <td>Dai Rios</td>
-				                          <td>Personnel Lead</td>
-				                        </tr>
-				                        <tr>
-				                          <td>Jenette Caldwell</td>
-				                          <td>Development Lead</td>
-				                        </tr>                        
-				                        <tr>
-				                          <td>Michael Bruce</td>
-				                          <td>Javascript Developer</td>
-				                        </tr>
-				                        <tr>
-				                          <td>Donna Snider</td>
-				                          <td>Customer Support</td>
-				                        </tr>
-				                        <tr>
-				                          <td>Tiger Nixon</td>
-				                          <td>System Architect</td>
-				                        </tr>  
-				                        <tr>
-				                          <td>Dai Rios</td>
-				                          <td>Personnel Lead</td>
-				                        </tr>
+                      				{{--@if($departments == null) 
+                      					<tr>
+                      						<td colspan="3" align="center">NO DATA</td>
+                      					</tr>
+                      				@else --}}
+	                      				@foreach($departments as $department)
+	                      					<tr>
+	                      						<td>{{ $department->name }}</td>
+	                      						<td>{{ $department->alias }}</td>
+	                      						<td class="center">
+	                                    <a id="edit" class="btn btn-info" 
+                                       href="/department/{{ $department->id }}">
+	                                        <i class="glyphicon glyphicon-edit icon-white"></i>
+	                                        Edit
+	                                    </a>
+	                                    <button type="button" class="btn btn-danger"
+                                       onclick="javascript:checkDelete({{ $department->id }});" 
+                                       data-token="{{ csrf_token() }}">
+	                                        <i class="glyphicon glyphicon-trash icon-white"></i>
+	                                        Delete
+	                                    </a>
+		                                </td>
+	                      					</tr>
+	                      				@endforeach
+	                      			{{-- @endif --}}
 				                    </tbody>
                     			</table>
                   			</div>
@@ -121,16 +63,51 @@
 @stop
 @section('js')
 <!-- Datatables -->
-<script src="vendors/data-table/datatables.net/js/jquery.dataTables.min.js"></script>
-<script src="vendors/data-table/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+{{-- <script src="vendors/data-table/datatables.net/js/jquery.dataTables.min.js"></script> --}}
+{{-- <script src="vendors/data-table/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
 <script src="vendors/data-table/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
-<script src="vendors/data-table/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
-<script src="vendors/data-table/datatables.net-scroller/js/datatables.scroller.min.js"></script>  
+<script src="vendors/data-table/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script --}}>
+{{-- <script src="vendors/data-table/datatables.net-scroller/js/datatables.scroller.min.js"></script>   --}}
 <!-- Datatables -->
     <script>
-      $(document).ready(function() {
-        $('#datatable').dataTable();
-      });
+      // $(document).ready(function() {
+      //   $('#datatable').dataTable();
+      // });
+      function checkDelete(id) {
+        if (confirm('Really delete?')) {
+          var token = $(this).data('token');
+          var request = $.ajax({
+            url: 'department/' + id,
+            type: 'DELETE',
+            dataType: "JSON",
+            data: {
+                "id": id,
+                "_method": 'DELETE',
+                "_token": token,
+            },
+          });
+           
+          request.done(function( msg ) {
+            alert( msg );
+          });
+           
+          request.fail(function( jqXHR, textStatus ) {
+            alert( "Request failed: " + textStatus );
+          });
+        //   $.ajax({
+        //     type: "DELETE",
+        //     url: '/department/' + id,
+        //     success: function(result) {
+        //       $(this).closest('tr').remove(); 
+        //     },
+        //     fail: function(){
+        //       console.log("5");
+        //     }
+
+        //   });
+        //   console.log("3");
+        }
+      }
     </script>
 <!-- /Datatables -->
 @stop
