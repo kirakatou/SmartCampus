@@ -2,7 +2,7 @@
 
 @section('css')
 <!-- Bootstrap Colorpicker -->
-<link href="vendors/mjolnic-bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css" rel="stylesheet">
+<link href="{{ asset('vendors/mjolnic-bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css') }}" rel="stylesheet">
 @stop
 @section('pageContent')
 <div class="right_col" role="main">
@@ -18,20 +18,26 @@
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                   <div class="x_content">
-                    <form class="form-horizontal form-label-left" method="POST" action="/department">
+                    <form class="form-horizontal form-label-left" method="POST" 
+                     action="/department{{ $department != NULL ? '/' . $department->id : ''}}">
+                      @if(isset($department))
+                          {{ method_field('PUT') }}
+                      @endif
                       {{ csrf_field() }}
                       <div class="item form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Name <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                          <input id="name" class="form-control col-md-7 col-xs-12" data-validate-length-range="6" data-validate-words="1" name="name" required="required" type="text">
+                          <input id="name" class="form-control col-md-7 col-xs-12" name="name" type="text" required="required"  data-validate-length-range="6" data-validate-words="1" 
+                          value="{{ $department != NULL ? $department->name : ''}}">
                         </div>
                       </div>
                       <div class="item form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="alias">Alias <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                          <input id="name" class="form-control col-md-7 col-xs-12" data-validate-length-range="6" data-validate-words="1" name="alias" required="required" type="text">
+                          <input id="alias" class="form-control col-md-7 col-xs-12"  name="alias" type="text" required="required"  data-validate-length-range="6" data-validate-words="1"
+                           value="{{ $department != NULL ? $department->alias : ''}}">
                         </div>
                       </div>
                       <div class="item form-group">
@@ -39,7 +45,8 @@
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <div class="input-group demo2">
-                            <input type="text" name="colour" value="#e01ab5" class="form-control" />
+                            <input type="text" name="colour" class="form-control"
+                             value="{{ $department != NULL ? $department->colour : '#e01ab5'}}" />
                             <span class="input-group-addon"><i></i></span>
                           </div>
                         </div>
@@ -61,9 +68,9 @@
 @stop
 @section('js')
 <!-- Bootstrap Colorpicker -->
-<script src="vendors/mjolnic-bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js"></script>
+<script src="{{ asset('vendors/mjolnic-bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js') }}"></script>
 <!-- validator -->
-<script src="vendors/validator/validator.js"></script>
+<script src="{{ asset('vendors/validator/validator.js') }}"></script>
 <!-- Bootstrap Colorpicker -->
     <script>
       $(document).ready(function() {
