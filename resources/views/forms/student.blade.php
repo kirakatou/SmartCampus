@@ -1,10 +1,10 @@
 @extends('layouts.template')
 @section('css')
 <!-- bootstrap-daterangepicker -->
-<link href="/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+<link href="{{ asset('/vendors/bootstrap-daterangepicker/daterangepicker.css') }}" rel="stylesheet">
 <!-- Select2 -->
-<link href="/vendors/select2/dist/css/select2.min.css" rel="stylesheet">
-<link href="/vendors/dist/jquery-editable-select.min.css" rel="stylesheet" />
+<link href="{{ asset('/vendors/select2/dist/css/select2.min.css') }}" rel="stylesheet">
+<link href="{{ asset('/vendors/dist/jquery-editable-select.min.css') }}" rel="stylesheet" />
 @stop
 @section('pageContent')
 <div class="right_col" role="main">
@@ -54,7 +54,7 @@
             						<label class="control-label col-md-3 col-sm-3 col-xs-12">Date Of Birth <span class="required">*</span>
             						</label>
             						<div class="col-md-6 col-sm-6 col-xs-12">
-            						  <input id="birthday" name="birthdate" class="date-picker form-control col-md-7 col-xs-12" required="required" type="text">
+            						  <input id="birthday" name="dob" class="date-picker form-control col-md-7 col-xs-12" required="required" type="text">
             						</div>
           					  </div>
           					  <div class="item form-group">
@@ -121,15 +121,15 @@
 @stop
 @section('js')
 <!-- bootstrap-daterangepicker -->
-<script src="vendors/moment/min/moment.min.js"></script>
-<script src="vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+<script src="{{ asset('vendors/moment/min/moment.min.js') }}"></script>
+<script src="{{ asset('vendors/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
 <!-- validator -->
-<script src="vendors/validator/validator.js"></script>
+<script src="{{ asset('vendors/validator/validator.js') }}"></script>
 <!-- Select2 -->
-<script src="vendors/select2/dist/js/select2.full.min.js"></script>
-<script type="vendors/jquery/dist/jquery.min.js"></script>
+<script src="{{ asset('vendors/select2/dist/js/select2.full.min.js') }}"></script>
+<script type="{{ asset('vendors/jquery/dist/jquery.min.js') }}"></script>
 {{-- <script src="http://code.jquery.com/jquery-latest.min.js"></script> --}}
-<script src="vendors/dist/jquery-editable-select.min.js"></script>
+<script src="{{ asset('vendors/dist/jquery-editable-select.min.js') }}"></script>
  
     <script>
       $(document).ready(function() {
