@@ -140,6 +140,9 @@
     <script>
       $(document).ready(function() {
         $('#birthday').daterangepicker({
+          locale: {
+            format: 'DD-MM-YYYY'
+          },
           singleDatePicker: true,
           calender_style: "picker_4"
         }, function(start, end, label) {
