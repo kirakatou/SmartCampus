@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\DB;
+use App\Department;
 use App\Student;
+use App\User;
 
 class StudentController extends Controller
 {
@@ -27,7 +31,7 @@ class StudentController extends Controller
     {
         $departments = Department::all();
         $classes = DB::table('students')->select('classname')->distinct()->get();
-        return view('form/student')->with("student", null)
+        return view('forms/student')->with("student", null)
                                    ->with('departments', $departments)
                                    ->with('classes', $classes);
     }
@@ -40,7 +44,25 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $path = $request->file('photo')->storeAs('photos', $request->nim);
+        $student =  Student::create([
+                        'nim'           => $request->nim,
+                        'name'          => $request->name,
+                        'gender'        => $request->gender,
+                        'dob'           => date('Y-m-d',strtotime($request->birthdate)),
+                        'email'         => $request->email,
+                        'religion'      => $request->religion,
+                        'department_id' => $request->department,
+                        'classname'     => $request->class,
+                        'image'         => $path
+                    ]);
+        User::create([
+                'username'      => $student->nim,
+                'password'      => bcrypt(date('dmY',strtotime($student->dob))),
+                'status'        => 'STUDENT',
+                'profile_id'    => $student->id
+            ]);
+        return Redirect::to('/student');
     }
 
     /**
