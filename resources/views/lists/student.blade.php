@@ -28,20 +28,20 @@
                                   <th>Email</th>
                                   <th>Religion</th>
                                   <th>Class</th>
-				                          <th>Image</th>
 				                        </tr>
                       				</thead>
                       				<tbody>
+                              @foreach($students as $student)
 				                        <tr>
-				                          <td>Tiger Nixon</td>
-				                          <td>System Architect</td>
-				                          <td>Tiger Nixon</td>
-				                          <td>System Architect</td>
-				                          <td>System Architect</td>
-                                  <td>Tiger Nixon</td>
-                                  <td>System Architect</td>
-                                  <td>Tiger Nixon</td>
+				                          <td>{{ $student->nim  }}</td>
+				                          <td>{{ $student->name }}</td>
+				                          <td>{{ $student->gender == 0 ? 'Male' : 'Female' }}</td>
+				                          <td>{{ $student->birthdate->format('d m Y') }}</td>
+				                          <td>{{ $student->email }}</td>
+                                  <td>{{ $student->religion }}</td>
+                                  <td>{{ $student->classname }}</td>
 				                        </tr>  
+                              @endforeach
 				                      </tbody>
                     			</table>
                   			</div>
@@ -53,11 +53,11 @@
 @stop
 @section('js')
 <!-- Datatables -->
-<script src="vendors/data-table/datatables.net/js/jquery.dataTables.min.js"></script>
-<script src="vendors/data-table/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-<script src="vendors/data-table/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
-<script src="vendors/data-table/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
-<script src="vendors/data-table/datatables.net-scroller/js/datatables.scroller.min.js"></script>  
+  <script src="vendors/data-table/datatables.net/js/jquery.dataTables.min.js"></script>
+  <script src="vendors/data-table/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+  <script src="vendors/data-table/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+  <script src="vendors/data-table/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+  <script src="vendors/data-table/datatables.net-scroller/js/datatables.scroller.min.js"></script>  
 <!-- Datatables -->
     <script>
       $(document).ready(function() {
