@@ -18,7 +18,8 @@ class CreateStudentsTable extends Migration
             $table->string('nim')->unique();
             $table->string('name');
             $table->integer('gender');
-            $table->date('birthdate');
+            $table->date('dob');
+            $table->string('email');
             $table->string('religion');
             $table->integer('department_id')->unsigned();
             $table->foreign('department_id')
