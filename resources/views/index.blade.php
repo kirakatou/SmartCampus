@@ -757,24 +757,18 @@
         <li><a class="link" href="#" id="nav-text2">ABOUT</a></li>
         @if (Route::has('login'))
           @if (Auth::check())
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                  {{ Auth::user()->username }} <span class="caret"></span>
+            <li><a class="link" href="#" id="nav-text3">PROFILE</a></li>
+            <li>
+              <a class="link"  id="nav-text4"
+                href="{{ url('/logout') }}"
+                onclick="event.preventDefault();document.getElementById('logout-form').submit();">
+                LOGOUTq
               </a>
 
-              <ul class="dropdown-menu" role="menu">
-                  <li>
-                      <a href="{{ url('/logout') }}"
-                          onclick="event.preventDefault();
-                                   document.getElementById('logout-form').submit();">
-                          Logout
-                      </a>
-
-                      <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
-                          {{ csrf_field() }}
-                      </form>
-                  </li>
-              </ul>
+              <form id="logout-form" action="{{ url('/logout') }}" method="POST" 
+                style="display: none;">
+                  {{ csrf_field() }}
+              </form>
             </li>
           @else
             <li><a class="link" href="/login" id="nav-text3">LOGIN</a></li>
