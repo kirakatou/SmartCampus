@@ -100,18 +100,22 @@
                         navtext2.pseudoStyle("after", "background", "white");
                         navtext3.style.color = "white";
                         navtext3.pseudoStyle("after", "background", "white");
+                        navtext4.style.color = "white";
+                        navtext4.pseudoStyle("after", "background", "white");
                         document.getElementById("logo").src = "images/icon/logo-01.png";
                         document.getElementById("features").style.opacity = "0";
                         document.getElementById("events").style.opacity = "0";
                         document.getElementById("bar1").style.background = "white";
                         document.getElementById("bar2").style.background = "white";
                         document.getElementById("bar3").style.background = "white";
+                        document.getElementById("bar4").style.background = "white";
                         if (mq.matches) {
                             document.getElementById("myNavbar").style.backgroundColor = "rgba(255, 255, 255,0.9)";
                             document.getElementById("close").style.color = "grey";
                             navtext1.style.color = "grey";
                             navtext2.style.color = "grey";
                             navtext3.style.color = "grey";
+                            navtext4.style.color = "grey";
                         }
                     }
 
@@ -268,19 +272,19 @@
                 width:80%;
                 transition:0.5s;
             }
-            #events1{
+            .event:nth-child(1){
                 color:white;
                 background-color:#ef4076;
                 padding:15% 0 15% 0;
                 margin:0;
             }
-            #events2{
+            .event:nth-child(2){
                 color:white;
                 background-color:#f0992a;
                 padding:15% 0 15% 0;
                 margin:0;
             }
-            #events3{
+            .event:nth-child(3){
                 color:white;
                 background-color:#65cce7;
                 padding:15% 0 15% 0;
@@ -385,13 +389,13 @@
             .overlay1 .eventdetails .event-content h1{
                 letter-spacing: 5px;
             }
-            #eventhr1{
+            .eventhr:nth-child(1){
                 border:2px solid #ef4076;
             }
-            #eventhr2{
+            .eventhr:nth-child(2){
                 border:2px solid #f0992a;
             }
-            #eventhr3{
+            .eventhr:nth-child(3){
                 border:2px solid #65cce7;
             }
             .overlay1 .eventdetails .closebtn{
@@ -603,19 +607,17 @@
 
             <div class="events">
                 <div class="content-events">
+                  @foreach($events as $event)
                     <div class="overlay1">
                         <div class="col-md-2"></div>
                         <div class="eventdetails col-md-8">
                             <a href="javascript:void(0)" class="closebtn glyphicon glyphicon-remove col-md-2 col-xs-12" id="close" onclick="closeEvent()"></a>
-                            <img src="images/seminar/SAP.jpg" class="col-xs-12 col-sm-4 col-md-4">
+                            <img src="{{ $event->poster }}" class="col-xs-12 col-sm-4 col-md-4">
                             <div class="event-content col-xs-12 col-sm-4 col-md-4">
-                                <h1>OREEDOO<hr id="eventhr1"></h1>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                                    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                                    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                                <h1>{{ $event->name }}<hr class="eventhr"></h1>
+                                <p>
+                                  {{ $event->description }}
+                                </p>
                                 <button id="registerbutton1" class="registerbutton">REGISTER</button>
                                 <div class="panel">
                                     <button id="registerstudent">STUDENT</button><button id="registerguest">GUEST</button>
@@ -624,51 +626,8 @@
                         </div>
                         <div class="col-md-2"></div>
                     </div>
-
-                    <div class="overlay1">
-                        <div class="col-md-2"></div>
-                        <div class="eventdetails col-md-8">
-                            <a href="javascript:void(0)" class="closebtn glyphicon glyphicon-remove col-md-2 col-xs-12s" id="close" onclick="closeEvent()"></a>
-                            <img src="images/seminar/SAP.jpg" class="col-xs-12 col-sm-4 col-md-4">
-                            <div class="event-content col-xs-12 col-sm-4 col-md-4">
-                                <h1>OREEDOO<hr id="eventhr2"></h1>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                                    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                                    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                                <button id="registerbutton2" class="registerbutton">REGISTER</button>
-                                <div class="panel">
-                                    <button id="registerstudent">STUDENT</button><button id="registerguest">GUEST</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-2"></div>
-                    </div>
-
-                    <div class="overlay1">
-                        <div class="col-md-2"></div>
-                        <div class="eventdetails col-md-8">
-                            <a href="javascript:void(0)" class="closebtn glyphicon glyphicon-remove col-md-2 col-xs-12s" id="close" onclick="closeEvent()"></a>
-                            <img src="images/seminar/SAP.jpg" class="col-xs-12 col-sm-4 col-md-4">
-                            <div class="event-content col-xs-12 col-sm-4 col-md-4">
-                                <h1>OREEDOO<hr id="eventhr3"></h1>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                                    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                                    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                                <button id="registerbutton3" class="registerbutton">REGISTER</button>
-                                <div class="panel">
-                                    <button id="registerstudent">STUDENT</button>
-                                    <button id="registerguest">GUEST</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-2"></div>
-                    </div>
+                  @endforeach
+                    
 
                     <div class="events-title col-xs-12 col-sm-12 col-md-12" id="events">
                         <h1 class="eventstitle">EVENTS</h1>
@@ -676,48 +635,33 @@
                         <div class="available"><h1>AVAILABLE</h1></div>
                         <center>
                             <div class="events-menu">
+                            @foreach($events as $event)
                               <a>
                                 <div class="list col-xs-12 col-sm-4 col-md-4">
                                   <div class="list-content">
-                                      <h3  id="events1">OREEDOO</h3><br>
+                                      <h3 class="event">{{ $event->name }}</h3><br>
                                       <div class="faculty">
-                                          <span class="IS">IS</span>
-                                          <span class="MGM">MGM</span>
-                                          <span class="ACC">ACC</span>
+                                        @foreach($event_fors as $for)
+                                          @if($for->event_id == $event->id)
+                                            @if($for->alias == 'IS')
+                                              <span style="background-color: {{ $for->colour }};" class="IS">
+                                                {{ $for->alias }}
+                                              </span>
+                                            @else
+                                              <span style="background-color: {{ $for->colour }};">
+                                                {{ $for->alias }}
+                                              </span>
+                                            @endif
+                                          @endif
+                                        @endforeach
                                       </div><br>
                                       <div class="register">REGISTERATION CLOSED AT</div>
                                       <div class="date">01-01-2017</div>
                                   </div>
                                 </div>
                               </a>
-                              <a>
-                                <div class="list col-xs-12 col-sm-4 col-md-4">
-                                  <div class="list-content">
-                                      <h3 id="events2">OREEDOO</h3><br>
-                                      <div class="faculty">
-                                          <span class="LAW">LAW</span>
-                                          <span class="HOS">HOS</span>
-                                          <span class="PUB">PUB</span>
-                                      </div><br>
-                                      <div class="register">REGISTERATION CLOSED AT</div>
-                                      <div class="date">01-01-2017</div>
-                                  </div>
-                                </div>
-                              </a>
-                              <a>
-                                <div class="list col-xs-12 col-sm-4 col-md-4">
-                                  <div class="list-content">
-                                      <h3 id="events3">OREEDOO</h3><br>
-                                      <div class="faculty">
-                                          <span class="IS">LAW</span>
-                                          <span class="ACC">ACC</span>
-                                      </div><br>
-                                      <div class="register">REGISTERATION CLOSED AT</div>
-                                      <div class="date">01-01-2017</div>
-                                  </div>
-                                </div>
-                              </a>
-                            </div>
+                            @endforeach
+                              
                         </center>
                     </div>
                 </div>
