@@ -26,14 +26,21 @@ class IndexController extends Controller
                     ->leftJoin('event_fors', 'events.id', '=', 'event_fors.event_id')
                     ->leftJoin('departments', 'event_fors.department_id', '=', 'departments.id')
                     ->where('datetime', '>', Carbon::today()->toDateString())
+                    ->orderBy('datetime', 'asc')
                     ->get();
-        $events = Event::All()->where('datetime', '>', Carbon::today()->toDateString());    
+        $events = Event::where('datetime', '>', Carbon::today()->toDateString())
+                        ->where('datetime', '<=', "datetime - INTERVAL 3 DAY")
+                        ->orderBy('datetime', 'asc')
+                        ->get();
         if(Auth::check()){
             $profile = Student::find(Auth::user()->profile_id);
-            return view('index')->with('profile', $profile)->with('events', $events)->with('event_fors', $event_fors);;
+            return view('index')->with('profile', $profile)
+                                ->with('events', $events)
+                                ->with('event_fors', $event_fors);;
         }
         else {
-            return view('index')->with('events', $events)->with('event_fors', $event_fors);
+            return view('index')->with('events', $events)
+                                ->with('event_fors', $event_fors);
         }
         
     }
