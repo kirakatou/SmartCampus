@@ -2,7 +2,7 @@
 
 @section('css')
 <!-- bootstrap-daterangepicker -->
-<link href="vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+<link href="{{ asset('vendors/bootstrap-daterangepicker/daterangepicker.css') }}" rel="stylesheet">
 @stop
 @section('pageContent')
 <div class="right_col" role="main">
@@ -18,19 +18,21 @@
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                   <div class="x_content">
-                    <form class="form-horizontal form-label-left" novalidate>
+                    <form class="form-horizontal form-label-left" method="POST" action="{{ url('/staff') }}" enctype="multipart/form-data">
+                    
+                    {{ csrf_field() }}
                       <div class="item form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="telephone">UID<span class="required">*</span>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="sid">SID<span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                          <input type="tel" id="telephone" name="phone" required="required" data-validate-length-range="8,20" class="form-control col-md-7 col-xs-12">
+                          <input type="text" id="sid" name="sid" required="required" class="form-control col-md-7 col-xs-12" value="{{ $staff != NULL ? $staff->sid : ''}}">
                         </div>
                       </div>
                       <div class="item form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Name <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                          <input id="name" class="form-control col-md-7 col-xs-12" data-validate-length-range="6" data-validate-words="1" name="name" required="required" type="text">
+                          <input id="name" class="form-control col-md-7 col-xs-12" data-validate-length-range="6" data-validate-words="1" name="name" required="required" value="{{ $staff != NULL ? $staff->name : ''}}" type="text">
                         </div>
                       </div>
                       <div class="form-group">
@@ -38,10 +40,12 @@
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <div id="gender" class="btn-group" data-toggle="buttons">
                             <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
-                              <input type="radio" name="gender" value="male"> &nbsp; Male &nbsp;
+                              <input type="radio" name="gender" value="0"
+                                {{ $staff != NULL ? ($staff->gender == 0 ? 'checked' : '') : ''}}/> &nbsp; Male &nbsp;
                             </label>
                             <label class="btn btn-primary" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
-                              <input type="radio" name="gender" value="female"> Female
+                              <input type="radio" name="gender" value="1"
+                                {{ $staff != NULL ? ($staff->gender == 1 ? 'checked' : '') : ''}}/> Female
                             </label>
                           </div>
                         </div>
@@ -50,14 +54,14 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Date Of Birth <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                          <input id="birthday" class="date-picker form-control col-md-7 col-xs-12" required="required" type="text">
+                          <input id="birthday" name="birthdate" class="date-picker form-control col-md-7 col-xs-12" required="required" type="text">
                         </div>
                       </div>
                       <div class="item form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="number">Image <span class="required">*</span>
                         </label>
                         <div class="checkbox col-md-6 col-sm-6 col-xs-12">
-                          <input type="file" name="berkas" accept=".jpg, .png, .gif">
+                          <input type="file" name="photo" accept=".jpg, .png, .gif">
                         </div>
                       </div>
                       <div class="ln_solid"></div>
@@ -77,14 +81,17 @@
 @stop
 @section('js')
 <!-- bootstrap-daterangepicker -->
-<script src="vendors/moment/min/moment.min.js"></script>
-<script src="vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+<script src="{{ asset('vendors/moment/min/moment.min.js') }}"></script>
+<script src="{{ asset('vendors/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
 <!-- validator -->
-<script src="vendors/validator/validator.js"></script>
+<script src="{{ asset('vendors/validator/validator.js') }}"></script>
 <!-- bootstrap-daterangepicker -->
     <script>
       $(document).ready(function() {
         $('#birthday').daterangepicker({
+          locale: {
+            format: 'DD-MM-YYYY'
+          },
           singleDatePicker: true,
           calender_style: "picker_4"
         }, function(start, end, label) {
