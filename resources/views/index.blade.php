@@ -584,18 +584,24 @@
                         <h1>FEATURES</h1>
                         <hr>
                         <div class="features-menu">
-                            <a href="#events"><div class="menu col-xs-12 col-sm-4 col-md-4">
-                                    <img src="images/icon/events-01.svgz"><br><br>
+                            <a href="#events">
+                                <div class="menu col-xs-12 col-sm-4 col-md-4">
+                                    <img src="images/icon/events-01.png"><br><br>
                                     <h3>EVENTS</h3>
-                                </div></a>
-                            <a href="#events"><div class="menu col-xs-12 col-sm-4 col-md-4">
-                                    <img src="images/icon/profile-01.svgz"><br><br>
+                                </div>
+                            </a>
+                            <a href="#events">
+                                <div class="menu col-xs-12 col-sm-4 col-md-4">
+                                    <img src="images/icon/profile-01.png"><br><br>
                                     <h3>PROFILE</h3>
-                                </div></a>
-                            <a href="#events"><div class="menu col-xs-12 col-sm-4 col-md-4">
-                                    <img src="images/icon/schedule-01.svgz"><br><br>
+                                </div>
+                            </a>
+                            <a href="#events">
+                                <div class="menu col-xs-12 col-sm-4 col-md-4">
+                                    <img src="images/icon/schedule-01.png"><br><br>
                                     <h3>SCHEDULE</h3>
-                                </div></a>
+                                </div>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -612,7 +618,7 @@
                         <div class="col-md-2"></div>
                         <div class="eventdetails col-md-8">
                             <a href="javascript:void(0)" class="closebtn glyphicon glyphicon-remove col-md-2 col-xs-12" id="close" onclick="closeEvent()"></a>
-                            <img src="{{ $event->poster }}" class="col-xs-12 col-sm-4 col-md-4">
+                            <img src="{{ asset("$event->poster") }}" class="col-xs-12 col-sm-4 col-md-4">
                             <div class="event-content col-xs-12 col-sm-4 col-md-4">
                                 <h1>{{ $event->name }}<hr class="eventhr"></h1>
                                 <p>
@@ -656,7 +662,9 @@
                                         @endforeach
                                       </div><br>
                                       <div class="register">REGISTERATION CLOSED AT</div>
-                                      <div class="date">01-01-2017</div>
+                                      <div class="date">
+                                        {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $event->datetime)->subDays(3)->format('d m Y') }}
+                                      </div>
                                   </div>
                                 </div>
                               </a>
