@@ -44,7 +44,7 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
-        $path = $request->file('photo')->storeAs('photos', $request->nim);
+        $path = $request->file('photo')->storeAs('images/photos', $request->nim);
         $student =  Student::create([
                         'nim'           => $request->nim,
                         'name'          => $request->name,
