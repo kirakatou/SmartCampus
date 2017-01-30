@@ -6,7 +6,7 @@
 <link href="vendors/data-table/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
 @stop
 @section('pageContent')
-		<div class="right_col" role="main">
+    <div class="right_col" role="main">
           <div class="">
             <div class="page-title">
               <div class="title_left">
@@ -14,34 +14,48 @@
               </div>
             </div>
             <div class="clearfix"></div>
-				<div class="row">
-					<div class="col-md-12 col-sm-12 col-xs-12">
-               			<div class="x_panel">
-                  			<div class="x_content">                    
-                    			<table id="datatable" class="table table-striped table-bordered">
-                      				<thead>
-				                        <tr>
-				                          <th>UID</th>
-				                          <th>Name</th>
-				                          <th>Gender</th>
-				                          <th>Date of Birth</th>
-				                          <th>Image</th>
-				                        </tr>
-                      				</thead>
-                      				<tbody>
-				                        <tr>
-				                          <td>Tiger Nixon</td>
-				                          <td>System Architect</td>
-				                          <td>Tiger Nixon</td>
-				                          <td>System Architect</td>
-				                          <td>System Architect</td>
-				                        </tr>  
-				                    </tbody>    
-                    			</table>
-                  			</div>
-                		</div>
-              		</div>
-              	</div>
+        <div class="row">
+          <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="x_panel">
+                        <div class="x_content">                    
+                          <table id="datatable" class="table table-striped table-bordered">
+                              <thead>
+                                <tr>
+                                  <th>SID</th>
+                                  <th>Name</th>
+                                  <th>Gender</th>
+                                  <th>Date of Birth</th>
+                                  <th>Action</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                              @foreach($staffs as $staff)
+                                <tr>
+                                  <td>{{$staff->sid}}</td>
+                                  <td>{{$staff->name}}</td>
+                                  <td>{{$staff->gender == 0 ? 'Male' : 'Female'}}</td>
+                                  <td>{{$staff->birthdate}}</td>
+                                 <td class="center">
+                                    <a id="edit" class="btn btn-info" 
+                                     href="/staff/{{ $staff->id }}">
+                                        <i class="glyphicon glyphicon-edit icon-white"></i>
+                                        Edit
+                                    </a>
+                                    <button type="button" class="btn btn-danger"
+                                     onclick="javascript:checkDelete({{ $staff->id }});" 
+                                     data-token="{{ csrf_token() }}">
+                                        <i class="glyphicon glyphicon-trash icon-white"></i>
+                                        Delete
+                                    </a>
+                                  </td>
+                                </tr>  
+                              @endforeach
+                            </tbody>    
+                          </table>
+                        </div>
+                    </div>
+                  </div>
+                </div>
             </div>
         </div>
 @stop
