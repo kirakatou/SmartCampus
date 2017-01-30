@@ -150,7 +150,7 @@
       $(document).ready(function() {
         $('#birthday').daterangepicker({
           locale: {
-            format: 'DD/MM/YYYY H:mm'
+            format: 'DD-MM-YYYY H:mm'
           },
           singleDatePicker: true,
           timePicker: true,
