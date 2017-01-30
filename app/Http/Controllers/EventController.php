@@ -40,26 +40,30 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
+        $event = new Event($request->except(['datetime']));
         if ($request->file('image')) {
-            $imagepath = $request->file('image')
-                                 ->storeAs('images', 
-                                    $request->name . '-' . date('dmy',strtotime($request->datetime)));
+            $file = $request->file('image');
+            $path = $file->storeAs('/images/images', 
+                    $request->name . '-' . date('dmy',strtotime($request->datetime)) 
+                    . '.' . $file->getClientOriginalExtension());
+            $event->image = $path;
         }
         if ($request->file('banner')) {
-            $bannerpath = $request->file('banner')
-                                  ->storeAs('banners', 
-                                    $request->name . '-' . date('dmy',strtotime($request->datetime)));
+            $file = $request->file('banner') ;
+            $path = $file->storeAs('/images/banner', 
+                    $request->name . '-' . date('dmy',strtotime($request->datetime)) 
+                    . '.' . $file->getClientOriginalExtension());
+            $event->banner = $path;
         }
         if ($request->file('poster')) {
-            $posterpath = $request->file('poster')
-                            ->storeAs('poster', 
-                                    $request->name . '-' . date('dmy',strtotime($request->datetime)));
+            $file = $request->file('poster') ;
+            $path = $file->storeAs('/images/poster', 
+                    $request->name . '-' . date('dmy',strtotime($request->datetime)) 
+                    . '.' . $file->getClientOriginalExtension());
+            $event->poster = $path;
         }
-        $request->offsetSet('datetime', date('Y-m-d H:i:s',strtotime($request->datetime)));
-        $request->offsetSet('image', $imagepath);
-        $request->offsetSet('banner',$bannerpath);
-        $request->offsetSet('poster',$posterpath);
-        $event = Event::create($request->all());
+        $event->datetime = date('Y-m-d H:i:s', strtotime($request->datetime));
+        $event->save();
         foreach ($request->for as $for) {
              EventFor::create([
                 'event_id'      => $event->id,
@@ -67,7 +71,6 @@ class EventController extends Controller
             ]);
         }
         return redirect("/event");;
-        //
     }
 
     /**
