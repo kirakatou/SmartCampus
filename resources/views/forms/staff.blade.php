@@ -18,8 +18,11 @@
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                   <div class="x_content">
-                    <form class="form-horizontal form-label-left" method="POST" action="{{ url('/staff') }}" enctype="multipart/form-data">
-                    
+                    <form class="form-horizontal form-label-left" method="POST" 
+                    action="/staff{{ $staff != NULL ? '/' . $staff->id : ''}}" enctype="multipart/form-data">
+                    @if(isset($staff))
+                          {{ method_field('PUT') }}
+                    @endif
                     {{ csrf_field() }}
                       <div class="item form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="sid">SID<span class="required">*</span>
@@ -54,14 +57,16 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Date Of Birth <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                          <input id="birthday" name="birthdate" class="date-picker form-control col-md-7 col-xs-12" required="required" type="text">
+                          <input id="birthday" name="birthdate" value="{{ $staff != NULL ? $staff->birthdate->format('d-m-Y') : ''}}" class="date-picker form-control col-md-7 col-xs-12" required="required" type="text">
                         </div>
                       </div>
                       <div class="item form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="number">Image <span class="required">*</span>
                         </label>
                         <div class="checkbox col-md-6 col-sm-6 col-xs-12">
-                          <input type="file" name="photo" accept=".jpg, .png, .gif">
+                          <input type="file" name="image" accept=".jpg, .png, .gif">
+                          <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                         
                         </div>
                       </div>
                       <div class="ln_solid"></div>
