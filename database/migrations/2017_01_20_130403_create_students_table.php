@@ -23,9 +23,7 @@ class CreateStudentsTable extends Migration
             $table->string('religion');
             $table->integer('department_id')->unsigned();
             $table->foreign('department_id')
-                  ->references('id')->on('departments')
-                  ->onDelete('cascade')
-                  ->onUpdate('cascade');
+                  ->references('id')->on('departments');
             $table->string('classname');
             $table->string('image')->nullable();
             $table->timestamps();
