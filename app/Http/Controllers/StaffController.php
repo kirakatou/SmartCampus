@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\DB;
 use App\Staff;
 use App\User;
+use Storage;
 
 class StaffController extends Controller
 {
@@ -26,6 +27,8 @@ class StaffController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    
+
     public function create()
     {
         return view('forms/staff')->with('staff', null);
@@ -39,14 +42,30 @@ class StaffController extends Controller
      */
     public function store(Request $request)
     {
-        $path = $request->file('photo')->storeAs('staffPhotos', $request->sid);
-        $staff =  Staff::create([
-                        'sid'           => $request->sid,
-                        'name'          => $request->name,
-                        'gender'        => $request->gender,
-                        'birthdate'     => date('Y-m-d',strtotime($request->birthdate)),
-                        'image'         => $path
-                    ]);
+        $staff = new Staff($request->except(['sid', 'name', 'gender', 'birthdate']));
+        if($request->file('image')){
+            $file = $request->file('image');
+            $path = $file->storeAs('/staffPhotos', 
+                    $request->name . '.' . $file->getClientOriginalExtension());
+            $staff->image = $path;
+        }
+        $staff->sid = $request->sid;
+        $staff->name = $request->name;
+        $staff->gender = $request->gender;
+        $staff->birthdate = date('Y-m-d',strtotime($request->birthdate));
+
+        $staff->save();
+        // $image=$request->file('photo');
+        // $filename=$image->getClientOriginalExtension();
+        // Storage::put('/staffPhotos/' . $request->sid . '.' . $filename,file_get_contents($image->getRealPath()));
+
+        // $staff =  Staff::create([
+        //                 'sid'           => $request->sid,
+        //                 'name'          => $request->name,
+        //                 'gender'        => $request->gender,
+        //                 'birthdate'     => date('Y-m-d',strtotime($request->birthdate)),
+        //                 'image'         => $filename
+        //             ]);
         User::create([
             'username'      => $staff->sid,
             'password'      => bcrypt(date('dmY',strtotime($staff->birthdate))),
@@ -77,7 +96,7 @@ class StaffController extends Controller
     public function edit($id)
     {
         $staff = Staff::findOrFail($id);
-        return view('forms/staff')->with("staff", $staff);;
+        return view('forms/staff')->with("staff", $staff);
     }
 
     /**
@@ -89,8 +108,12 @@ class StaffController extends Controller
      */
     public function update(Request $request, $id)
     {
+
         $staff = Staff::findOrFail($id);
-        $staff->fill($request->all())->save();
+        $staff->name = $request->name;
+        $staff->gender = $request->gender;
+        $staff->birthdate = date('Y-m-d',strtotime($request->birthdate));
+        $staff->save();
         return redirect("/staff");
     }
 
