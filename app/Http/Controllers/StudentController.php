@@ -73,7 +73,11 @@ class StudentController extends Controller
      */
     public function show($id)
     {
-        //
+        $departments = Department::all();
+        $classes = DB::table('students')->select('classname')->distinct()->get();
+        $student = Student::findOrFail($id);
+        return view('forms/student', compact('student'))->with('departments', $departments)
+                                                        ->with('classes', $classes);
     }
 
     /**
@@ -84,7 +88,11 @@ class StudentController extends Controller
      */
     public function edit($id)
     {
-        //
+        $departments = Department::all();
+        $classes = DB::table('students')->select('classname')->distinct()->get();
+        $student = Student::findOrFail($id);
+        return view('forms/student')->with("student", $student) ->with('departments', $departments)
+                                                                ->with('classes', $classes);
     }
 
     /**
@@ -96,7 +104,9 @@ class StudentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $student = Student::findOrFail();
+        $student->fill($request->all())->save();
+        return redirect("/student");
     }
 
     /**
@@ -107,6 +117,8 @@ class StudentController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $student = Student::findOrFail($id);
+        $student->delete();
+        return redirect("/student");
     }
 }
