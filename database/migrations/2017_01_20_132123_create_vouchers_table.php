@@ -18,13 +18,13 @@ class CreateVouchersTable extends Migration
             $table->integer('event_id')->unsigned();
             $table->foreign('event_id')
                   ->references('id')->on('events');
-            $table->integer('student_id')->unsigned();
-            $table->foreign('student_id')
-                  ->references('id')->on('students');
-            $table->string('no');
-            $table->string('voucher');
+            $table->integer('participant_id');
+            $table->string('status');
+            $table->string('no')->unique();
             $table->double('price');
-            $table->string('receiptDate');
+            $table->date('receipt_date');
+            $table->boolean('paid')->default(0);
+            $table->boolean('void')->default(0);
             $table->timestamps();
         });
     }
