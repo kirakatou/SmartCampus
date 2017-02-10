@@ -7,6 +7,8 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
         <script src="js/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="{{ asset('vendors/sweetalert/sweetalert.min.js') }}"></script>
+        <link rel="stylesheet" type="text/css" href="{{ asset('vendors/sweetalert/sweetalert.css') }}">
         <script type="text/javascript">
             $(document).ready(function () {
                 $(this).scrollTop(0);
@@ -26,9 +28,6 @@
 
         <script type="text/javascript">
             $(document).ready(function () {
-                $(".registerbutton").click(function () {
-                    $(".panel").toggle("slow");
-                });
 
                 $(document).scroll(function () {
                     var UID = {
@@ -100,8 +99,6 @@
                         navtext2.pseudoStyle("after", "background", "white");
                         navtext3.style.color = "white";
                         navtext3.pseudoStyle("after", "background", "white");
-                        navtext4.style.color = "white";
-                        navtext4.pseudoStyle("after", "background", "white");
                         document.getElementById("logo").src = "images/icon/logo-01.png";
                         document.getElementById("features").style.opacity = "0";
                         document.getElementById("events").style.opacity = "0";
@@ -126,8 +123,14 @@
         <link rel="shortcut icon" type="image/png" href="images/icon/favicon.ico">
 
         <style>
+            @font-face {
+                font-family: Geomanist;
+                
+                src: url("fonts/Geomanist-Regular-Webfont/geomanist-regular-webfont.ttf");
+            }
+            
             body{
-                font-family:Corbel;
+                font-family:  Corbel;
             }
             .container{
                 background-image:url("images/background/bg.jpg");
@@ -197,7 +200,7 @@
             }
             .title h3{
                 margin-top:40px;
-                font-family:"Corbel";
+                font-family: Corbel;
                 font-size:2.5vw;
                 letter-spacing: 5px;
             }
@@ -272,19 +275,19 @@
                 width:80%;
                 transition:0.5s;
             }
-            .event:nth-child(1){
+            .events-menu a:nth-child(1) .event{
                 color:white;
                 background-color:#ef4076;
                 padding:15% 0 15% 0;
                 margin:0;
             }
-            .event:nth-child(2){
+            .events-menu a:nth-child(2) .event{
                 color:white;
                 background-color:#f0992a;
                 padding:15% 0 15% 0;
                 margin:0;
             }
-            .event:nth-child(3){
+            .events-menu a:nth-child(3) .event{
                 color:white;
                 background-color:#65cce7;
                 padding:15% 0 15% 0;
@@ -389,13 +392,13 @@
             .overlay1 .eventdetails .event-content h1{
                 letter-spacing: 5px;
             }
-            .eventhr:nth-child(1){
+            .content-events .overlay1:nth-child(1) .eventhr{
                 border:2px solid #ef4076;
             }
-            .eventhr:nth-child(2){
+            .content-events .overlay1:nth-child(2) .eventhr{
                 border:2px solid #f0992a;
             }
-            .eventhr:nth-child(3){
+            .content-events .overlay1:nth-child(3) .eventhr{
                 border:2px solid #65cce7;
             }
             .overlay1 .eventdetails .closebtn{
@@ -437,27 +440,27 @@
                 background-color: #0caf4d;
                 color:white;
             }
-            #registerbutton1{
+            .content-events .overlay1:nth-child(1) .registerbutton{
                 border:1px solid #ef4076;
                 color:#ef4076;
             }
-            #registerbutton1:hover{
+            .content-events .overlay1:nth-child(1) .registerbutton:hover{
                 background-color: #ef4076;
                 color:white;
             }
-            #registerbutton2{
+            .content-events .overlay1:nth-child(2) .registerbutton{
                 border:1px solid #f0992a;
                 color:#f0992a;
             }
-            #registerbutton2:hover{
+            .content-events .overlay1:nth-child(2) .registerbutton:hover{
                 background-color: #f0992a;
                 color:white;
             }
-            #registerbutton3{
+            .content-events .overlay1:nth-child(3) .registerbutton{
                 border:1px solid #65cce7;
                 color:#65cce7;
             }
-            #registerbutton3:hover{
+            .content-events .overlay1:nth-child(3) .registerbutton:hover{
                 background-color: #65cce7;
                 color:white;
             }
@@ -563,6 +566,7 @@
         </style>
     </head>
     <body>
+    @include('sweet::alert')
     <center>
         <div class="container" id="home">
 
@@ -618,16 +622,20 @@
                         <div class="col-md-2"></div>
                         <div class="eventdetails col-md-8">
                             <a href="javascript:void(0)" class="closebtn glyphicon glyphicon-remove col-md-2 col-xs-12" id="close" onclick="closeEvent()"></a>
-                            <img src="{{ asset("$event->poster") }}" class="col-xs-12 col-sm-4 col-md-4">
+                            <img src="{{ asset("storage/$event->poster") }}" class="col-xs-12 col-sm-4 col-md-4">
                             <div class="event-content col-xs-12 col-sm-4 col-md-4">
                                 <h1>{{ $event->name }}<hr class="eventhr"></h1>
                                 <p>
                                   {{ $event->description }}
                                 </p>
-                                <button id="registerbutton1" class="registerbutton">REGISTER</button>
-                                <div class="panel">
+                                <a href="{{ url("/join/event/$event->id") }}">
+                                    <button class="registerbutton">
+                                        REGISTER
+                                    </button>
+                                </a>
+                                {{-- <div class="panel">
                                     <button id="registerstudent">STUDENT</button><button id="registerguest">GUEST</button>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                         <div class="col-md-2"></div>
@@ -638,38 +646,38 @@
                     <div class="events-title col-xs-12 col-sm-12 col-md-12" id="events">
                         <h1 class="eventstitle">EVENTS</h1>
                         <hr>
-                        <div class="available"><h1>AVAILABLE</h1></div>
+                        <div class="available"><h1>{{ $events == '[]' ? 'NOT AVAILABLE' : 'AVAILABLE' }}</h1></div>
                         <center>
                             <div class="events-menu">
-                            @foreach($events as $event)
-                              <a>
-                                <div class="list col-xs-12 col-sm-4 col-md-4">
-                                  <div class="list-content">
-                                      <h3 class="event">{{ $event->name }}</h3><br>
-                                      <div class="faculty">
-                                        @foreach($event_fors as $for)
-                                          @if($for->event_id == $event->id)
-                                            @if($for->alias == 'IS')
-                                              <span style="background-color: {{ $for->colour }};" class="IS">
-                                                {{ $for->alias }}
-                                              </span>
-                                            @else
-                                              <span style="background-color: {{ $for->colour }};">
-                                                {{ $for->alias }}
-                                              </span>
-                                            @endif
-                                          @endif
-                                        @endforeach
-                                      </div><br>
-                                      <div class="register">REGISTERATION CLOSED AT</div>
-                                      <div class="date">
-                                        {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $event->datetime)->subDays(3)->format('d m Y') }}
+                                @foreach($events as $event)
+                                  <a>
+                                    <div class="list col-xs-12 col-sm-4 col-md-4">
+                                      <div class="list-content">
+                                          <h3 class="event">{{ $event->name }}</h3><br>
+                                          <div class="faculty">
+                                            @foreach($event_fors as $for)
+                                              @if($for->event_id == $event->id)
+                                                @if($for->alias == 'IS')
+                                                  <span style="background-color: {{ $for->colour }};" class="IS">
+                                                    {{ $for->alias }}
+                                                  </span>
+                                                @else
+                                                  <span style="background-color: {{ $for->colour }};">
+                                                    {{ $for->alias }}
+                                                  </span>
+                                                @endif
+                                              @endif
+                                            @endforeach
+                                          </div><br>
+                                          <div class="register">REGISTERATION CLOSED AT</div>
+                                          <div class="date">
+                                            {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $event->datetime)->subDays(3)->format('d m Y') }}
+                                          </div>
                                       </div>
-                                  </div>
-                                </div>
-                              </a>
-                            @endforeach
-                              
+                                    </div>
+                                  </a>
+                                @endforeach
+                            </div> 
                         </center>
                     </div>
                 </div>
