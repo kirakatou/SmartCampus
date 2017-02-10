@@ -43,33 +43,29 @@ class EventController extends Controller
         $event = new Event($request->except(['datetime']));
         if ($request->file('image')) {
             $file = $request->file('image');
-            $path = $file->storeAs('/images/images', 
+            $path = $file->storeAs('/public/images/images', 
                     $request->name . '-' . date('dmy',strtotime($request->datetime)) 
                     . '.' . $file->getClientOriginalExtension());
             $event->image = $path;
         }
-        if ($request->file('banner')) {
-            $file = $request->file('banner') ;
-            $path = $file->storeAs('/images/banner', 
-                    $request->name . '-' . date('dmy',strtotime($request->datetime)) 
-                    . '.' . $file->getClientOriginalExtension());
-            $event->banner = $path;
-        }
         if ($request->file('poster')) {
             $file = $request->file('poster') ;
-            $path = $file->storeAs('/images/poster', 
+            $path = $file->storeAs('/public/images/poster', 
                     $request->name . '-' . date('dmy',strtotime($request->datetime)) 
                     . '.' . $file->getClientOriginalExtension());
             $event->poster = $path;
         }
         $event->datetime = date('Y-m-d H:i:s', strtotime($request->datetime));
         $event->save();
-        foreach ($request->for as $for) {
-             EventFor::create([
-                'event_id'      => $event->id,
-                'department_id' => $for
-            ]);
+        if($request->for != null){
+            foreach ($request->for as $for) {
+                EventFor::create([
+                    'event_id'      => $event->id,
+                    'department_id' => $for
+                ]);
+            }
         }
+        
         return redirect("/event");;
     }
 
