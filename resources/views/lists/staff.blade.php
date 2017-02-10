@@ -34,7 +34,7 @@
                                   <td>{{$staff->sid}}</td>
                                   <td>{{$staff->name}}</td>
                                   <td>{{$staff->gender == 0 ? 'Male' : 'Female'}}</td>
-                                  <td>{{$staff->birthdate}}</td>
+                                  <td>{{$staff->birthdate->format('d M Y')}}</td>
                                  <td class="center">
                                     <a id="edit" class="btn btn-info" 
                                      href="/staff/{{ $staff->id }}">
