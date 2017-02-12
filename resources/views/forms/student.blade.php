@@ -21,57 +21,62 @@
                 <div class="x_panel">
                   <div class="x_content">
 
-                    <form class="form-horizontal form-label-left" method="POST" action="{{ url('/student') }}" enctype="multipart/form-data">
-          					  {{ csrf_field() }}
-            					<div class="item form-group">
-            						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="nim">NIM<span class="required">*</span>
-            						</label>
-            						<div class="col-md-6 col-sm-6 col-xs-12">
-            						  <input type="tel" id="nim" name="nim" required="required" data-validate-length-range="8,20" class="form-control col-md-7 col-xs-12">
-            						</div>
-          					  </div>
-          					  <div class="item form-group">
-            						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Name <span class="required">*</span>
-            						</label>
-            						<div class="col-md-6 col-sm-6 col-xs-12">
-            						  <input id="name" class="form-control col-md-7 col-xs-12" data-validate-length-range="6" data-validate-words="1" name="name" required="required" type="text">
-            						</div>
-          					  </div>
-          					  <div class="form-group">
-            						<label class="control-label col-md-3 col-sm-3 col-xs-12">Gender</label>
-            						<div class="col-md-6 col-sm-6 col-xs-12">
-            						  <div id="gender" class="btn-group" data-toggle="buttons">
-            							<label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
-            							  <input type="radio" name="gender" value="0"> &nbsp; Male &nbsp;
-            							</label>
-            							<label class="btn btn-primary" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
-            							  <input type="radio" name="gender" value="1"> Female
-            							</label>
-            						  </div>
-            						</div>
-          					  </div> 
-          					  <div class="form-group">
-            						<label class="control-label col-md-3 col-sm-3 col-xs-12">Date Of Birth <span class="required">*</span>
-            						</label>
-            						<div class="col-md-6 col-sm-6 col-xs-12">
-            						  <input id="birthday" name="dob" class="date-picker form-control col-md-7 col-xs-12" required="required" type="text">
-            						</div>
-          					  </div>
-          					  <div class="item form-group">
-            						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="email">Email <span class="required">*</span>
-            						</label>
-            						<div class="col-md-6 col-sm-6 col-xs-12">
-            						  <input type="email" id="email" name="email" required="required" class="form-control col-md-7 col-xs-12">
-            						</div>
-          					  </div>
+                    <form class="form-horizontal form-label-left" method="POST" action="/student{{ $student != NULL ? '/' . $student->id : ''}}" enctype="multipart/form-data">
+                    @if(isset($student))
+                          {{ method_field('PUT') }}
+                    @endif
+                      {{ csrf_field() }}
+                      <div class="item form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="nim">NIM<span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input type="tel" id="nim" name="nim" required="required" data-validate-length-range="8,20" class="form-control col-md-7 col-xs-12" {{$student != NULL ? 'disabled' : ''}} value="{{$student != NULL ? $student->nim : ''}}">
+                        </div>
+                      </div>
+                      <div class="item form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Name <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input id="name" class="form-control col-md-7 col-xs-12" data-validate-length-range="6" data-validate-words="1" name="name" required="required" type="text" value="{{$student != NULL ? $student->name : ''}}">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Gender</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <div id="gender" class="btn-group" data-toggle="buttons">
+                          <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                            <input type="radio" name="gender" value="0" 
+                              {{$student != NULL ? ($student->gender == 0 ? 'checked' : '') : ''}}> &nbsp; Male &nbsp;
+                          </label>
+                          <label class="btn btn-primary" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                            <input type="radio" name="gender" value="1"
+                              {{$student != NULL ? ($student->gender == 1 ? 'checked' : '') : ''}}> Female
+                          </label>
+                          </div>
+                        </div>
+                      </div> 
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Date Of Birth <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input id="birthday" name="dob" value="{{$student != NULL ? $student->dob->format('d-m-Y') : ''}}" class="date-picker form-control col-md-7 col-xs-12" required="required" type="text">
+                        </div>
+                      </div>
+                      <div class="item form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email">Email <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input type="email" id="email" name="email" required="required" value="{{$student != NULL ? $student->email : ''}}" class="form-control col-md-7 col-xs-12">
+                        </div>
+                      </div>
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Religion <span class="required">*</span></label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <select id="religion" name="religion" class="form-control" >
-                            <option value="0">Christian</option>
-                            <option value="1">Buddha</option>
-                            <option value="2">Islam</option>
-                            <option value="3">Hindu</option>             
+                            <option value="0" {{$student != NULL ? ($student->religion == 0 ? 'selected' : '') : ''}}>Christian</option>
+                            <option value="1" {{$student != NULL ? ($student->religion == 1 ? 'selected' : '') : ''}}>Buddha</option>
+                            <option value="2" {{$student != NULL ? ($student->religion == 2 ? 'selected' : '') : ''}}>Islam</option>
+                            <option value="3" {{$student != NULL ? ($student->religion == 3 ? 'selected' : '') : ''}}>Hindu</option>             
                           </select>
                         </div>
                       </div>
@@ -80,7 +85,7 @@
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <select id="department" name="department" class="form-control">
                             @foreach($departments as $department)
-                              <option value={{ $department->id }}>{{ $department->name }}</option>
+                              <option value="{{ $department->id }}" {{ $student != NULL ? ($department->id == $student->department_id ? 'selected' : '') : '' }}> {{$department->name}}</option>
                             @endforeach
                           </select>
                           
@@ -90,8 +95,8 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Class <span class="required">*</span></label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <select id="class" name="class" class="form-control">
-              								@foreach($classes as $class)
-                                <option value={{$class->classname}}>{{$class->classname}}</option>
+                              @foreach($classes as $class)
+                                <option value="{{ $class->classname }}" {{ $student != NULL ? ($class->classname == $student->classname ? 'selected' : '') : '' }}> {{$class->classname}}</option>
                               @endforeach
                           </select>
                         </div>
