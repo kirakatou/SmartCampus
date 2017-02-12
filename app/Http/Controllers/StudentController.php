@@ -44,24 +44,30 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
-        $path = $request->file('photo')->storeAs('images/photos', $request->nim);
-        $student =  Student::create([
-                        'nim'           => $request->nim,
-                        'name'          => $request->name,
-                        'gender'        => $request->gender,
-                        'dob'           => date('Y-m-d',strtotime($request->dob)),
-                        'email'         => $request->email,
-                        'religion'      => $request->religion,
-                        'department_id' => $request->department,
-                        'classname'     => $request->class,
-                        'image'         => $path
-                    ]);
-        User::create([
-                'username'      => $student->nim,
-                'password'      => bcrypt(date('dmY',strtotime($student->dob))),
-                'status'        => 'STUDENT',
-                'profile_id'    => $student->id
-            ]);
+        $student = new Student($request->except(['nim', 'name', 'gender', 'dob', 'email',
+                                                 'religion', 'department_id', 'classname']));
+        if($request->file('photo')){
+            $file = $request->file('photo');
+            $path = $file->storeAs('/public/images/photos', 
+                    $request->nim . '.' . $file->getClientOriginalExtension());
+            $student->image = $path;
+        }
+        $student->nim = $request->nim;
+        $student->name = $request->name;
+        $student->gender = $request->gender;
+        $student->dob = date('Y-m-d',strtotime($request->dob));
+        $student->email = $request->email;
+        $student->religion = $request->religion;
+        $student->department_id = $request->department;
+        $student->classname = $request->class;
+        $student->save();
+
+        $user = new User($request->except(['username', 'password', 'status', 'profile_id']));
+        $user->username = $student->nim;
+        $user->password = bcrypt(date('dmY',strtotime($student->dob)));
+        $user->status = 'STUDENT';
+        $user->profile_id = $student->id;
+        $user->save();
         return Redirect::to('/student');
     }
 
@@ -104,8 +110,21 @@ class StudentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $student = Student::findOrFail();
-        $student->fill($request->all())->save();
+        $student = Student::findOrFail($id);
+        if($request->file('photo')){
+            $file = $request->file('photo');
+            $path = $file->storeAs('/public/images/photos', 
+                    $student->nim . '.' . $file->getClientOriginalExtension());
+            $student->image = $path;
+        }
+        $student->name = $request->name;
+        $student->gender = $request->gender;
+        $student->dob = date('Y-m-d',strtotime($request->dob));
+        $student->email = $request->email;
+        $student->religion = $request->religion;
+        $student->department_id = $request->department;
+        $student->classname = $request->class;
+        $student->save();
         return redirect("/student");
     }
 
