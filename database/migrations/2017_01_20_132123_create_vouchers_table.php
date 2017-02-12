@@ -20,7 +20,7 @@ class CreateVouchersTable extends Migration
                   ->references('id')->on('events');
             $table->integer('participant_id');
             $table->string('status');
-            $table->string('no')->unique();
+            $table->string('no')->unique()->nullable();
             $table->double('price');
             $table->date('receipt_date');
             $table->boolean('paid')->default(0);
