@@ -43,7 +43,7 @@
 	                                        Edit
 	                                    </a>
 	                                    <button type="button" class="btn btn-danger"
-                                       onclick="javascript:checkDelete({{ $department->id }});" 
+                                       onclick="checkDelete({{ $department->id }}, this);" 
                                        data-token="{{ csrf_token() }}">
 	                                        <i class="glyphicon glyphicon-trash icon-white"></i>
 	                                        Delete
@@ -73,22 +73,20 @@
       // $(document).ready(function() {
       //   $('#datatable').dataTable();
       // });
-      function checkDelete(id) {
+      function checkDelete(id, row) {
         if (confirm('Really delete?')) {
-          var token = $(this).data('token');
           var request = $.ajax({
             url: 'department/' + id,
             type: 'DELETE',
-            dataType: "JSON",
             data: {
-                "id": id,
-                "_method": 'DELETE',
-                "_token": token,
+                "_method": "delete",
+                "_token": "{{ csrf_token() }}",
             },
           });
            
-          request.done(function( msg ) {
-            alert( msg );
+          request.done(function() {
+            console.log(row.closest('tr'));
+            row.closest('tr').remove(); 
           });
            
           request.fail(function( jqXHR, textStatus ) {
