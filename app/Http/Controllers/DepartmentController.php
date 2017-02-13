@@ -90,6 +90,5 @@ class DepartmentController extends Controller
     {
         $department = Department::findOrFail($id);
         $department->delete();
-        return redirect("/department");
     }
 }
