@@ -45,9 +45,9 @@ class StaffController extends Controller
         $staff = new Staff($request->except(['sid', 'name', 'gender', 'birthdate']));
         if($request->file('image')){
             $file = $request->file('image');
-            $path = $file->storeAs('/staffPhotos', 
+            $path = $file->storeAs('/public/images/staff', 
                     $request->name . '.' . $file->getClientOriginalExtension());
-            $staff->image = $path;
+            $staff->image = '/images/staff/' . $request->name . '.' . $file->getClientOriginalExtension();
         }
         $staff->sid = $request->sid;
         $staff->name = $request->name;
