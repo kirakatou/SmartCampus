@@ -26,9 +26,9 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Type <span class="required">*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <select name="type" class="select2_single form-control" >
-                            <option value="0">Workshop</option>
-                            <option value="1">Seminar</option>
-                            <option value="2">Annual Event</option>
+                            <option value="0" {{$event != NULL ? ($event->type == 0 ? 'selected' : '') : ''}}>Workshop</option>
+                            <option value="1" {{$event != NULL ? ($event->type == 1 ? 'selected' : '') : ''}}>Seminar</option>
+                            <option value="2" {{$event != NULL ? ($event->type == 2 ? 'selected' : '') : ''}}>Annual Event</option>
                           </select>
                         </div>
                       </div>
@@ -46,7 +46,7 @@
                                     document.getElementById('pay').focus();
                                   }else{
                                     document.getElementById('pay').disabled = true;
-                                    document.getElementById('pay').value = 0;
+                                    document.getElementById('pay').value = NULL;
                                   }" />
                               </span>
                               <input type="text" id="pay" name="price" 
@@ -59,39 +59,55 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Date Time <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                          <input id="birthday" name="datetime" class="date-picker form-control col-md-7 col-xs-12" required="required" type="text">
+                          <input id="birthday" name="datetime" class="date-picker form-control col-md-7 col-xs-12" required="required" type="text" value="{{$event != NULL ? $event->datetime->format('Y-m-d H:i:s') : ''}}">
                         </div>
                       </div>
                       <div class="item form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="capacity">Capacity<span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                          <input type="number" id="capacity" name="capacity" required="required" data-validate-length-range="1,3" class="form-control col-md-7 col-xs-12">
+                          <input type="number" id="capacity" name="capacity" required="required" data-validate-length-range="1,3" class="form-control col-md-7 col-xs-12" value="{{ $event != NULL ? $event->capacity : '' }}"/>
                         </div>
                       </div>
                       <div class="item form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="number">For <span class="required">*</span>
                         </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                          <select name="for[]" class="select2_multiple form-control" multiple="multiple">
-                            @foreach($departments as $department)
-                              <option value="{{ $department->id }}">{{ $department->name }}</option>
-                            @endforeach
-                          </select>
-                        </div>
+                          <div class="checkbox col-md-6 col-sm-6 col-xs-12">
+                            <select name="for[]" id="for" class="select2_multiple col-md-10 col-sm-10 col-xs-12" multiple>
+                              @foreach($departments as $department)
+                              <option value="{{ $department->id }}"
+                              @if($eventfors != null)
+                                @foreach($eventfors as $eventfor)
+                                 {{ $event != NULL ? ($department->id == $eventfor->department_id ? 'multiple' : '') : ''}}
+                                @endforeach
+                              @endif
+                              >{{ $department->name }}
+                              </option>
+                              @endforeach
+                            </select>
+                            <label>
+                              <input type="checkbox" name="public" 
+                                  onclick="
+                                  if(this.checked) {
+                                    document.getElementById('for').disabled = true;
+                                    document.getElementById('for').value = NULL;
+                                  }else{
+                                    document.getElementById('for').disabled = false;
+                                  }" />public</label> 
+                          </div>
                       </div>
                       <div class="item form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Name <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                          <input id="name" class="form-control col-md-7 col-xs-12" data-validate-length-range="6" data-validate-words="1" name="name" required="required" type="text">
+                          <input id="name" class="form-control col-md-7 col-xs-12" data-validate-length-range="6" data-validate-words="1" name="name" required="required" type="text" value="{{ $event != NULL ? $event->name : '' }}">
                         </div>
                       </div>
                       <div class="item form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="location">Location <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                          <input id="location" class="form-control col-md-7 col-xs-12" data-validate-length-range="6" data-validate-words="1" name="location" required="required" type="text">
+                          <input id="location" class="form-control col-md-7 col-xs-12" data-validate-length-range="6" data-validate-words="1" name="location" required="required" type="text" value="{{ $event != NULL ? $event->location : '' }}">
                         </div>
                       </div>
                       <div class="item form-group">
@@ -112,7 +128,7 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="description">Description <span class="required">*</span>
                         </label>
                         <div class="checkbox col-md-6 col-sm-6 col-xs-12">
-                          <textarea id="description" required="required" class="form-control" name="description" data-parsley-trigger="keyup" data-parsley-minlength="20" data-parsley-maxlength="255" data-parsley-validation-threshold="10"></textarea>
+                          <textarea id="description" required="required" class="form-control" name="description" data-parsley-trigger="keyup" data-parsley-minlength="20" data-parsley-maxlength="255" data-parsley-validation-threshold="10">{{ $event != NULL ? $event->description : '' }}</textarea>
                         </div>
                       </div>
                       <div class="ln_solid"></div>
@@ -164,6 +180,11 @@
           allowClear: true
         });
         $(".select2_group").select2({});
+        $(".select2_multiple").select2({
+          maximumSelectionLength: "",
+          placeholder: "Unlimited",
+          allowClear: true
+        });
         $(".select2_multiple").select2({
           maximumSelectionLength: "",
           placeholder: "Unlimited",
