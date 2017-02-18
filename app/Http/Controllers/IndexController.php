@@ -8,10 +8,13 @@ use DateTime;
 use Carbon\Carbon; 
 use App\Student;
 use App\Voucher;
+use App\Member;
+use App\User;
 use App\Event;
 use App\EventFor;
+use App\UserActivation;
 use App\EventParticipant;
-use App\Mail\EventJoinMail;
+use App\Mail\PaymentMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -69,6 +72,7 @@ class IndexController extends Controller
     {
         $event = Event::findOrFail($id);
         $fors = EventFor::where('event_id', $id)->get();
+        $verified = 0;
         if(Auth::user()->status = 'GUEST'){
             if(Auth::user()->activated = '1'){
                 $verified = 1;
@@ -78,7 +82,6 @@ class IndexController extends Controller
             $verified = 1;
             $profile = Student::findOrFail(Auth::user()->profile_id);
         }
-        $verified = 0;
         if($verified == 1){
             $same = 0;
             if($event->public){
@@ -115,7 +118,12 @@ class IndexController extends Controller
                             $voucher->save();
                             $voucher->no = 'SC-' . sprintf("%06d", $voucher->id);
                             $voucher->save();
-                            Mail::to($profile->email)->send(new EventJoinMail($profile->name));
+                            Mail::to($profile->email)
+                                ->send(new PaymentMail($voucher->no, $profile->name, 
+                                                       $event->name, $voucher->price, 
+                                                       Carbon::createFromFormat('Y-m-d H:i:s', $voucher->receipt_date)
+                                                             ->addDay()
+                                                             ->format('d m Y H:i')));
                             Alert::message('Please confirm your invoice on your email', 'Thanks for your participation!')->persistent('Close');
                         }else {
                             Alert::error('Sorry, You have already joined', 'Oops!');
@@ -147,7 +155,10 @@ class IndexController extends Controller
                 }
             }
             else {
-                Alert::error('This event is not for your department.');
+                if(Auth::user()->status = 'GUEST')
+                    Alert::error('This Event only for UPH Medan Student');
+                else
+                    Alert::error('This Event is not for Your Department.');
                 
             }
         }
@@ -209,6 +220,7 @@ class IndexController extends Controller
         $user = User::findOrFail($activation['user_id']);
         $user->activated = 1;
         $user->save();
+        Alert::success('Your Account have been verified!');
         return redirect("/");
     }
 }
