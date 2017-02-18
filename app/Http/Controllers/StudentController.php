@@ -67,6 +67,7 @@ class StudentController extends Controller
         $user->password = bcrypt(date('dmY',strtotime($student->dob)));
         $user->status = 'STUDENT';
         $user->profile_id = $student->id;
+        $user->activated = '1';
         $user->save();
         return Redirect::to('/student');
     }
