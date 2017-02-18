@@ -2,20 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
 use Mail;
+use Alert;
+use DateTime;
 use Carbon\Carbon; 
 use App\Student;
+use App\Voucher;
 use App\Event;
 use App\EventFor;
 use App\EventParticipant;
-use Alert;
-use DateTime;
 use App\Mail\EventJoinMail;
-
-
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class IndexController extends Controller
 {
@@ -26,8 +25,6 @@ class IndexController extends Controller
      */
     public function index()
     {
-        // return Carbon::today()->toDateString();
-        // Alert::message('Welcome Back!');
         $event_fors = DB::table('events')
                     ->select("event_id", "department_id", "departments.alias", "departments.colour")
                     ->leftJoin('event_fors', 'events.id', '=', 'event_fors.event_id')
@@ -72,52 +69,92 @@ class IndexController extends Controller
     {
         $event = Event::findOrFail($id);
         $fors = EventFor::where('event_id', $id)->get();
-        $profile = Student::findOrFail(Auth::user()->profile_id);
-        $same = 0;
-
-        if($event->public){
-            $same = 1;
+        if(Auth::user()->status = 'GUEST'){
+            if(Auth::user()->activated = '1'){
+                $verified = 1;
+                $profile = Member::findOrFail(Auth::user()->profile_id);
+            }
+        }else {
+            $verified = 1;
+            $profile = Student::findOrFail(Auth::user()->profile_id);
         }
-        foreach($fors as $for){
-            if($for->department_id == $profile->department_id){
+        $verified = 0;
+        if($verified == 1){
+            $same = 0;
+            if($event->public){
                 $same = 1;
             }
-        }
-        if($same == 1){
-            if($event->pay){
-                $joined = Voucher::where('event_id', $id)
-                                 ->where('participant_id', $profile->id);
-                if($joined == null){
-                    $voucher = new Voucher();
-                    $voucher->event_id = $id;
-                    $voucher->participant_id = Auth::user()->profile_id;
-                    $voucher->status = Auth::user()->status;
-                    $voucher->price = $event->price;
-                    $voucher->receipt_date = Carbon::now();
-                    Mail::to($profile->email)->send(new EventJoinMail($profile->name));
+            else {
+                foreach($fors as $for){
+                    if($for->department_id == $profile->department_id){
+                        $same = 1;
+                    }
+                }
+            }
+            
+            if($same == 1){
+                if($event->pay){
+                    $pending_participant = DB::table('vouchers')
+                                            ->leftJoin('event_participants', 'vouchers.participant_id', '=', 'event_participants.participant_id')
+                                            ->whereNull('event_participants.id')
+                                            ->where(DB::raw('DATE_ADD(created_at, INTERVAL 1 DAY)'), '>', Carbon::now())
+                                            ->count();
+                    $fixed_participant = EventParticipant::where('event_id', $id)->count();
+                    if(($pending_participant + $fixed_participant) < $event->capacity){
+                        $joined = Voucher::where('event_id', $id)
+                                     ->where('participant_id', $profile->id)
+                                     ->where(DB::raw('DATE_ADD(created_at, INTERVAL 1 DAY)'), '>', Carbon::now())
+                                     ->count();
+                        if($joined == 0){
+                            $voucher = new Voucher();
+                            $voucher->event_id = $id;
+                            $voucher->participant_id = Auth::user()->profile_id;
+                            $voucher->status = Auth::user()->status;
+                            $voucher->price = $event->price;
+                            $voucher->receipt_date = Carbon::now();
+                            $voucher->save();
+                            $voucher->no = 'SC-' . sprintf("%06d", $voucher->id);
+                            $voucher->save();
+                            Mail::to($profile->email)->send(new EventJoinMail($profile->name));
+                            Alert::message('Please confirm your invoice on your email', 'Thanks for your participation!')->persistent('Close');
+                        }else {
+                            Alert::error('Sorry, You have already joined', 'Oops!');
+                        }
+                    }
+                    
+                }
+                else {
+                    $participant = EventParticipant::where('event_id', $id)->count();
+                    if($participant < $event->capacity){
+                        $joined = EventParticipant::where('event_id', $id)
+                                                  ->where('participant_id', $profile->id)
+                                                  ->count();;
+                        if($joined == 0){
+                            $participation = new EventParticipant();
+                            $participation->event_id = $event->id;
+                            $participation->participant_id = Auth::user()->profile_id;
+                            $participation->barcode = $event->id . "/" . Auth::user()->profile_id;
+                            $participation->save();
+                            Alert::success('Thanks for your participation!');
+                        }
+                        else {
+                            Alert::error('Sorry, You have already joined', 'Oops!');
+                        }
+                    }
+                    else {
+                        Alert::error('Sorry, Event already Full', 'Oops!');
+                    }
                 }
             }
             else {
-                $joined = EventParticipant::where('event_id', $id)
-                                          ->where('participant_id', $profile->id);
-                if($joined == null){
-                    $participation = new EventParticipant();
-                    $participation->event_id = $event->id;
-                    $participation->participant_id = Auth::user()->profile_id;
-                    $participation->barcode = $event->id . '-' . Auth::user()->profile_id;
-                    $participation->save();
-                    Alert::success('Thank you for your participation!');
-                }
-                else {
-                    Alert::error('Sorry, You have already joined', 'Oops!');
-                }
+                Alert::error('This event is not for your department.');
+                
             }
-            return redirect('/');
         }
         else {
-            Alert::error('This event is not for your department.');
-            return redirect('/');
+            Alert::error('Please Verify your account first', 'Oops!');
         }
+        return redirect('/');
         
     }
 
@@ -164,5 +201,14 @@ class IndexController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function verify($token)
+    {
+        $activation = UserActivation::where('token', $token)->get()->last();
+        $user = User::findOrFail($activation['user_id']);
+        $user->activated = 1;
+        $user->save();
+        return redirect("/");
     }
 }
