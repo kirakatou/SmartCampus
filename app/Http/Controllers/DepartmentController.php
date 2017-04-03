@@ -37,7 +37,7 @@ class DepartmentController extends Controller
     public function store(Request $request)
     {
         Department::create($request->all());
-        return redirect("/department");
+        return redirect("/admin/department");
     }
 
     /**
@@ -76,7 +76,7 @@ class DepartmentController extends Controller
     {
         $department = Department::findOrFail($id);
         $department->fill($request->all())->save();
-        return redirect("/department");
+        return redirect("/admin/department");
         //
     }
 

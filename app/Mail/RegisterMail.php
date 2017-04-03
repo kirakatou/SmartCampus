@@ -10,15 +10,16 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 class RegisterMail extends Mailable
 {
     use Queueable, SerializesModels;
+    public $token;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($token)
     {
-        //
+        $this->token = $token;
     }
 
     /**
@@ -28,6 +29,8 @@ class RegisterMail extends Mailable
      */
     public function build()
     {
-        return $this->view('view.name');
+        return $this->subject('One More Step!')
+                    ->from('smartcampus@hmjsi.org')
+                    ->view('emails.register');
     }
 }

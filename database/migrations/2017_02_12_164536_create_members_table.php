@@ -17,7 +17,7 @@ class CreateMembersTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('nohp');
-            $table->string('email')->unique();
+            $table->string('email', 150)->unique();
             $table->string('profession');
             $table->timestamps();
         });

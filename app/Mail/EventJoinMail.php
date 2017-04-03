@@ -10,15 +10,19 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 class EventJoinMail extends Mailable
 {
     use Queueable, SerializesModels;
-    public $name;
+    public $event_name, $price, $datetime, $location, $qr;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($name)
+    public function __construct($event_name, $price, $datetime, $location, $qr)
     {
-        $this->name = $name;
+        $this->event_name = $event_name;
+        $this->price = $price;
+        $this->datetime = $datetime;
+        $this->location = $location;
+        $this->qr = $qr;
     }
 
     /**
@@ -28,7 +32,8 @@ class EventJoinMail extends Mailable
      */
     public function build()
     {
-        return $this->from('smartcampus@hmjsi.org')
-                    ->view('home');
+        return $this->subject('Thanks for your participation!')
+                    ->from('smartcampus@hmjsi.org')
+                    ->view('emails.join');
     }
 }

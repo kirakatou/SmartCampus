@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use DB;
 use Mail;
 use Alert;
 use DateTime;
@@ -16,8 +17,7 @@ use App\UserActivation;
 use App\EventParticipant;
 use App\Mail\PaymentMail;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
+use Auth;
 
 class IndexController extends Controller
 {
@@ -36,7 +36,7 @@ class IndexController extends Controller
                     ->orderBy('datetime', 'asc')
                     ->get();
         $events = Event::where('datetime', '>', Carbon::today()->toDateString())
-                        ->where('datetime', '<=', "datetime - INTERVAL 3 DAY")
+                        ->where(DB::raw('DATE_SUB(datetime, INTERVAL 3 DAY)'), '>' , Carbon::today()->toDateString())
                         ->orderBy('datetime', 'asc')
                         ->get();
         if(Auth::check()){
@@ -73,8 +73,8 @@ class IndexController extends Controller
         $event = Event::findOrFail($id);
         $fors = EventFor::where('event_id', $id)->get();
         $verified = 0;
-        if(Auth::user()->status = 'GUEST'){
-            if(Auth::user()->activated = '1'){
+        if(Auth::user()->status == 'GUEST'){
+            if(Auth::user()->activated == '1'){
                 $verified = 1;
                 $profile = Member::findOrFail(Auth::user()->profile_id);
             }
@@ -141,6 +141,7 @@ class IndexController extends Controller
                             $participation = new EventParticipant();
                             $participation->event_id = $event->id;
                             $participation->participant_id = Auth::user()->profile_id;
+                            $participation->status = Auth::user()->status;
                             $participation->barcode = $event->id . "/" . Auth::user()->profile_id;
                             $participation->save();
                             Alert::success('Thanks for your participation!');
@@ -155,10 +156,12 @@ class IndexController extends Controller
                 }
             }
             else {
-                if(Auth::user()->status = 'GUEST')
+                if(Auth::user()->status == 'GUEST'){
                     Alert::error('This Event only for UPH Medan Student');
-                else
+                }
+                else{
                     Alert::error('This Event is not for Your Department.');
+                }
                 
             }
         }

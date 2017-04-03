@@ -6,6 +6,7 @@
 <link href="vendors/data-table/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
 @stop
 @section('pageContent')
+
 		<div class="right_col" role="main">
           <div class="">
             <div class="page-title">

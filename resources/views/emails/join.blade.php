@@ -2,15 +2,15 @@
 <html>
 <head>
 	<title>Email Invoice</title>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width,height=device-height">
-  	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  	<link rel="stylesheet" type="text/css" href="js/jquery.min.js">
-  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  	<link rel="shortcut icon" type="image/png" href="image/icon/favicon.ico">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,height=device-height">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="js/jquery.min.js">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="shortcut icon" type="image/png" href="image/icon/favicon.ico">
 
-  	<style>
+    <style>
       body{
         font-family:Arial;
         width:100%;
@@ -47,16 +47,29 @@
       }
       table{
         border-collapse: separate;
-        border-spacing: 1vh 3vh;
+        border-spacing: 1vh 2vh;
       }
       tr,td{
-        padding:1vh 5vh;
+        padding:1vh 1.5vh;
       }
       th{
         padding:1vh 3vh;
       }
       td{
         border:0.35vh solid #e8e8e8;
+      }
+      .inv-content img{
+        width:100%;
+        margin-top:-2vh;
+      }
+      .message{
+        margin-top:5vh;
+      }
+      .QR{
+        margin:5vh 0 5vh 0;
+        border:0.35vh solid #444444;
+        padding:15vh 15vh;
+        width:45%;
       }
 
       @media only screen 
@@ -70,7 +83,7 @@
         width:35vh;
       }
       .box{
-        width:90%;
+        width:100%;
       }
       .inv-title h2{
         font-size: 3vh;
@@ -96,13 +109,41 @@
         border-spacing: 2vh 2vh;
       }
       tr,td{
-        padding:1vh 2vh;
+        padding:1% 2%;
       }
       th{
-        padding:1vh 1vh;
+        padding:1% 1%;
       }
       td{
         border:0.35vh solid #e8e8e8;
+      }
+      .inv-content img{
+        width:100%;
+      }
+      .message{
+        width:95%;
+      }
+    }
+
+  /*IPAD*/
+    @media only screen 
+    and (min-device-width: 700px) 
+    and (max-device-width: 1024px)
+    and (-webkit-min-device-pixel-ratio: 2) {
+      .box{
+        width:100%;
+        font-size: 2vh;
+      }
+    }
+
+    /*IPAD PRO*/
+    @media only screen 
+    and (min-device-width: 1024px) 
+    and (max-device-width: 1366px)
+    and (-webkit-min-device-pixel-ratio: 2) {
+      .box{
+        width:100%;
+        font-size: 2vh;
       }
     }
 
@@ -115,18 +156,21 @@
 		<h1><img src="{{ asset("images/icon/email-icon.png") }}"></h1>
 	</div>
 		<div class="box">
-			<div class="inv-title">
+			<!-- <div class="inv-title">
 				<h2>INVOICE</h2>
-			</div>
+			</div> -->
 			<div class="inv-content">
 				<table>
-						<tr><th class="inv-code">{{$no}}<hr></th></tr>
-						<tr><th>Name</th><th> :</th><td>{{$name}}</td></tr>
-						<tr><th>Event Name</th><th> :</th><td>{{$event_name}}</td></tr>
-						<tr><th>Price</th><th> :</th><td>Rp. {{$price}},-</td></tr>
-						<tr><th>Status</th><th> :</th><td>PENDING</td></tr>
-						<tr><th>Valid Until</th><th> :</th><td>{{$valid_date}}</td></tr>
+						<tr><img src="{{ asset("images/icon/thankyou.jpg") }}"></tr>
+						<tr><p class="message">we have sent you the QR Code below for sign in & sign out.
+            <br>
+            Come on time & enjoy the event !</p></tr>
+						<tr><th>Event Name</th><th> :</th><td>{{ $event_name }}</td></tr>
+						<tr><th>Price</th><th> :</th><td>Rp. {{ $price }},-</td></tr>
+						<tr><th>Date & Time</th><th> :</th><td>{{ $datetime }} - FIN</td></tr>
+						<tr><th>Venue</th><th> :</th><td>{{ $location }}</td></tr>
 				</table>
+        <?php echo $qr; ?>
 			</div>
 		</div>
 	

@@ -20,7 +20,7 @@
                 <div class="x_panel">
                   <div class="x_content">
                     <form class="form-horizontal form-label-left" method="POST" 
-                     action="{{ url('/event') }}" enctype="multipart/form-data">
+                     action="{{ url('/admin/event') }}" enctype="multipart/form-data">
                       {{ csrf_field() }}
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Type <span class="required">*</label>

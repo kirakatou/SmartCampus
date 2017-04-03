@@ -10,13 +10,13 @@ class EventParticipant extends Model
 	
     protected $fillable = [ 'event_id', 'participant_id', 'signin', 'in_time', 'signout', 'out_time', 'barcode' ];
 
-    public function setInTimeAttribute($value)
+    public function setSignInAttribute($value)
     {
-    	$this->attributes['in_time'] = (boolean)($value);
+    	$this->attributes['signin'] = (boolean)($value);
     }
 
-    public function setOutTimeAttribute($value)
+    public function setSignOutAttribute($value)
     {
-    	$this->attributes['out_time'] = (boolean)($value);
+    	$this->attributes['signout'] = (boolean)($value);
     }
 }

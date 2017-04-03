@@ -19,7 +19,7 @@
                 <div class="x_panel">
                   <div class="x_content">
                     <form class="form-horizontal form-label-left" method="POST" 
-                     action="/department{{ $department != NULL ? '/' . $department->id : ''}}">
+                     action="/admin/department{{ $department != NULL ? '/' . $department->id : ''}}">
                       @if(isset($department))
                           {{ method_field('PUT') }}
                       @endif

@@ -12,40 +12,46 @@
 */
 Route::get('/', 'IndexController@index');
 
-Route::group(['middleware' => 'auth'], function () {
-
-	Route::get('/join/event/{id?}', 'IndexController@store');
-	Route::get('/cancel/event/{id}', 'IndexController@update');
-	
-});
-
-Route::get('/alert', function() {
-    \Alert::message('Hey!');
-
-    return view('errors.503');
-});
-
-Route::resource('/department', 'DepartmentController');
-
-Route::resource('/student', 'StudentController');
-
-Route::resource('/event', 'EventController');
-
-Route::resource('/staff', 'StaffController');
+Route::get('/register/validation/{token}', [
+    'as' => 'validation', 'uses' => 'IndexController@verify'
+]);
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index');
-
 Route::group(['middleware' => 'auth'], function () {
-	Route::group(['middleware' => 'App\Http\Middleware\AdminMiddleware'], function(){
-	    Route::get('/admin', function(){
-	        return 'testt';
-	    });
 
+	Route::get('/join/event/{id?}', 'IndexController@store');
+	
+	Route::get('/cancel/event/{id}', 'IndexController@update');
+
+	Route::group(['middleware' => 'App\Http\Middleware\AdminMiddleware'], function(){
+	    Route::group(['prefix' => 'admin'], function(){
+
+	    	Route::resource('/department', 'DepartmentController');
+	    	
+			Route::resource('/student', 'StudentController');
+
+			Route::resource('/event', 'EventController');
+
+			Route::resource('/staff', 'StaffController');
+
+	    	Route::get('/attendance', 'EventAttendanceController@index');
+
+			Route::get('/attendance/signin/{id}', 'EventAttendanceController@signIn');
+
+			Route::get('/attendance/signout/{id}', 'EventAttendanceController@signOut');
+
+			Route::post('/event/signin/{id}/{token}', 'EventAttendanceController@signInStore');
+
+			Route::post('/event/signout/{id}/{token}', 'EventAttendanceController@signOutStore');
+
+			Route::resource('/payment', 'ConfirmationController', ['only' => [
+			    'index', 'show'
+			]]);
+
+			Route::get('/payment/voucher/{id}', 'ConfirmationController@create');
+
+			Route::post('/payment/confirmation/{id}/{paid?}', 'ConfirmationController@update');
+	    });
 	});
 });
-// Route::get('images/{folder}/{filename}', function ($folder, $filename)
-// {
-//     return Image::make(storage_path() . '/' . $folder . '/' . $filename)->response();
-// });

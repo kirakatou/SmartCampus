@@ -10,7 +10,7 @@
           <div class="">
             <div class="page-title">
               <div class="title_left">
-                <h3>Data Event</h3>
+                <h3>Event List</h3>
               </div>
             </div>
             <div class="clearfix"></div>
@@ -24,7 +24,6 @@
 				                          <th>Name</th>
 				                          <th>Date Time</th>
                                   <th>Location</th>
-                                  <th>Capacity</th>
                                   <th>Action</th>
 				                        </tr>
                       				</thead>
@@ -34,18 +33,14 @@
 				                          <td>{{ $event->name }}</td>
 				                          <td>{{ $event->datetime->format('d M Y') }}</td>
 				                          <td>{{ $event->location }}</td>
-                                  <td>{{ $event->capacity }}</td>
                                   <td class="center">
-                                    <a id="edit" class="btn btn-info" 
-                                     href="/event/{{ $event->id }}">
+                                    <a id="sign_in" class="btn btn-info" href="/attendance/signin/{{$event->id}}">
                                         <i class="glyphicon glyphicon-edit icon-white"></i>
-                                        Edit
+                                        SignIn
                                     </a>
-                                    <button type="button" class="btn btn-danger"
-                                     onclick="javascript:checkDelete({{ $event->id }});" 
-                                     data-token="{{ csrf_token() }}">
-                                        <i class="glyphicon glyphicon-trash icon-white"></i>
-                                        Delete
+                                    <a id="sign_out" class="btn btn-info" href="/attendance/signout/{{$event->id}}">
+                                        <i class="glyphicon glyphicon-edit icon-white"></i>
+                                        SignOut
                                     </a>
                                   </td>
 				                        </tr>  
@@ -67,26 +62,4 @@
   <script src="vendors/data-table/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
   <script src="vendors/data-table/datatables.net-scroller/js/datatables.scroller.min.js"></script>  
 <script>
-function checkDelete(id, row) {
-  if(confirm('Really delete?')) {
-    var request = $.ajax({
-      url: 'event/' + id,
-      type: 'DELETE',
-      data: {
-            "_method": "delete",
-            "_token": "{{ csrf_token() }}",
-            },
-    });
-           
-    request.done(function() {
-      console.log(row.closest('tr'));
-      row.closest('tr').remove(); 
-    });
-           
-    request.fail(function( jqXHR, textStatus ) {
-      alert( "Request failed: " + textStatus );
-    });
-  }
-}
-</script>
 @stop

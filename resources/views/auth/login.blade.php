@@ -10,7 +10,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="shortcut icon" type="image/png" href="images/icon/favicon.ico">
     <style>
-        body{
+      body{
            font-family:Corbel;
            background-image:url("images/background/bg.jpg");
            background-size:cover;
@@ -67,57 +67,67 @@
           max-height:300%;
           margin-top:-13px;
         }
-        .login-button{
-            border:none;
-            background-color: lightblue;
-            color: white;
-            font-size:120%;
-        }
-        .loginform{
-            margin-top:180px;
-            width:90%;
-            letter-spacing: 3px;
-        }
-        .loginform .login{
-            background:white;
-            border-radius:10px;
-            padding:10px 0 40px 0;
-        }
-        .loginname{
-            width:50%;
-        }
-        .loginname hr{
-            width:30%;
-            border:1px solid black;
-            margin-top:15px;
-        }
-        .loginform .form{
-            padding:10px;
-        }
-        .form .username , .form .password{
-            margin-top:10px;
-            padding:2% 0 2% 0;
+    .login-button,.register-button{
+      border:none;
+      background-color: lightblue;
+      color: white;
+      font-size:120%;
+    }
+    .loginform,.registerform{
+      margin-top:180px;
+      width:90%;
+      letter-spacing: 3px;
+    }
+    .registerform{
+      display:none;
+    }
+    .loginform .login ,.registerform .login{
+      background:white;
+      border-radius:10px;
+      padding:10px 0 40px 0;
+    }
+    .loginname{
+      width:50%;
+    }
+    .loginname hr{
+      width:30%;
+      border:1px solid black;
+      margin-top:15px;
+    }
+    .loginform .form ,.registerform .form{
+      padding:10px;
+    }
+    .form .username , .form .password{
+      margin-top:10px;
+      padding:2% 0 2% 0;
       border:1px solid rgba(75,76,76,0.3);
-        }
-        .login-button{
-            margin-top:20px;
-            color:white;
-        border:none;
-        background:#6bcdee;
-        padding: 5% 0 5% 0;
-        transition:0.3s;
-        letter-spacing: 3px;
-         }
-         .form a{
-            color:grey;
-            letter-spacing: 2px;
-            text-decoration:none;
-            font-size:110%;
-            transition: 0.3s;
-         }
-         .form a:hover{
-            color:#6bcdee;
-         }
+    }
+    .login-button,.register-button{
+      margin-top:20px;
+      color:white;
+      border:none;
+      background:#6bcdee;
+      padding: 5% 0 5% 0;
+      transition:0.3s;
+      letter-spacing: 3px;
+     }
+     .register-button{
+      background:#F79529;
+      width:40vh;
+     }
+     .form a{
+      color:grey;
+      letter-spacing: 2px;
+      text-decoration:none;
+      font-size:110%;
+      transition: 0.3s;
+     }
+     .form a:hover{
+      color:#6bcdee;
+     }
+     .already{
+      margin-top: 2vh;
+     }
      .navbar-toggle{
       width:50px;
       height:50px;
@@ -130,7 +140,20 @@
      }
      .overlay .closebtn{
         opacity:0;
-        }
+     }
+     #panel1{
+      display:none;
+      padding:2.5vh 0vh 0vh 0vh;
+     }
+     .profession{
+      border:1px solid rgba(75,76,76,0.3);
+      width:60%;
+      padding:1vh 1vh;
+     }
+     input[type="radio"]{
+      width:3vh;
+      height:2vh;
+     }
 
        @media only screen 
     and (min-device-width: 320px) 
@@ -186,67 +209,257 @@
         opacity: 1;
         text-decoration: none;
       }
+      .profession{
+        width:80%;
+      }
+      input[type="radio"]{
+        width:4vh;
+        height:4vh;
+      }
+    }
+
+           @media only screen 
+    and (min-device-width: 700px) 
+    and (max-device-width: 1024px)
+    and (-webkit-min-device-pixel-ratio: 2) {
+      .container{
+        width:100%;
+      }
+      .login{
+        width:100%;
+      }
+      .register-button{
+        width:26vh;
+      }
+    }
+
+               @media only screen 
+    and (min-device-width: 1024px) 
+    and (max-device-width: 1366px)
+    and (-webkit-min-device-pixel-ratio: 2) {
+      .container{
+        width:100%;
+      }
+      .login{
+        width:100%;
+      }
+      .register-button{
+        width:20vh;
+      }
     }
     </style>
+    <script type="text/javascript">
+
+      function register() {
+        document.getElementById("registerform").style.display = "block";
+        document.getElementById("loginform").style.display = "none";
+      }
+      function login() {
+        document.getElementById("registerform").style.display = "none";
+        document.getElementById("loginform").style.display = "block";
+      }
+      <?php $route = Route::currentRouteName(); ?>
+      @if($route == 'login')
+        window.onload = login;
+      @else 
+        window.onload = register;
+      @endif  
+
+    </script>
 </head>
 <body>
 <center>
-<div class="container">
-<div id="login" class="loginform">
-<div class="col-sm-4 col-md-4"></div>
-      <div class="login col-xs-12 col-sm-4 col-md-4">
-      <div class="loginname"><h3>LOGIN<hr></h3></div>
-        <table>
-          <form method="POST" action="{{ url('/login') }}">
-              {{ csrf_field() }}
-            <tr>
-              <td>
-                <span class="form col-xs-12 col-sm-12 col-md-12">
-                  <span class="col-xs-12 col-sm-12 col-md-6">USERNAME</span>
-                  <input type="text" name="username" class="username col-xs-12 col-sm-12 col-md-12" 
-                          value="{{ old('username') }}"required autofocus>
-                  @if ($errors->has('username'))
-                    <span class="help-block">
-                        <strong>{{ $errors->first('username') }}</strong>
-                    </span>
-                  @endif
-                </span>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <span class="form col-xs-12 col-sm-12 col-md-12">
-                  <span class="col-xs-12 col-sm-12 col-md-6">PASSWORD</span>
-                  <input type="password" name="password" class="password col-xs-12 col-sm-12 col-md-12" required>
-                  @if ($errors->has('password'))
-                    <span class="help-block">
-                        <strong>{{ $errors->first('password') }}</strong>
-                    </span>
-                  @endif
-                </span>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <span class="form col-xs-12 col-sm-12 col-md-12">
-                    <input type="submit" id="login" value="LOGIN" class="login-button col-xs-12 col-sm-12 col-md-12">
-                </span>
-              </td>
-            </tr>
 
-            <tr>
-              <td>
-                <span class="form col-xs-12 col-sm-12 col-md-12">
-                  <center>
-                    <a class="forgot col-xs-12 col-sm-12 col-md-12" href="{{ url('/password/reset') }}">Forgot Password?</a>
-                  </center>
-                </span>
-              </td>
-            </tr>
-          </form>
-        </table>
-      </div>
+<div class="container">
+<div id="loginform" class="loginform">
+  <div class="col-sm-4 col-md-4"></div>
+  <div class="login col-xs-12 col-sm-4 col-md-4">
+    <div class="loginname"><h3>LOGIN<hr></h3></div>
+      <table>
+        <form method="POST" action="{{ url('/login') }}">
+            {{ csrf_field() }}
+          <tr>
+            <td>
+              <span class="form col-xs-12 col-sm-12 col-md-12">
+                <span class="col-xs-12 col-sm-12 col-md-6">USERNAME</span>
+                <input type="text" name="username" class="username col-xs-12 col-sm-12 col-md-12" 
+                        value="{{ old('username') }}"required autofocus>
+                @if ($errors->has('username'))
+                  <span class="help-block">
+                      <strong>Username not registered</strong>
+                  </span>
+                @endif
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <span class="form col-xs-12 col-sm-12 col-md-12">
+                <span class="col-xs-12 col-sm-12 col-md-6">PASSWORD</span>
+                <input type="password" name="password" class="password col-xs-12 col-sm-12 col-md-12" required>
+                @if ($errors->has('password'))
+                  <span class="help-block">
+                      <strong>Username or Password is incorrect</strong>
+                  </span>
+                @endif
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <span class="form col-xs-12 col-sm-12 col-md-12">
+                  <input type="submit" id="login" value="LOGIN" class="login-button col-xs-12 col-sm-12 col-md-12">
+              </span>
+            </td>
+          </tr>
+        </form>
+        <tr>
+          <td>
+            <span class="form col-xs-12 col-sm-12 col-md-12">
+              <input type="submit" id="register" value="REGISTER" class="register-button col-xs-12 col-sm-12 col-md-12" onclick="register()">
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span class="form col-xs-12 col-sm-12 col-md-12">
+              <center>
+                <a class="forgot col-xs-12 col-sm-12 col-md-12" href="{{ url('/password/reset') }}">Forgot Password?</a>
+              </center>
+            </span>
+          </td>
+        </tr>
+        
+      </table>
   </div>
+</div>
+
+<div id="registerform" class="registerform">
+  <div class="col-sm-4 col-md-4"></div>
+  <div class="login col-xs-12 col-sm-4 col-md-4">
+    <div class="loginname"><h3>REGISTER<hr></h3></div>
+    <form class="form-horizontal" role="form" method="POST" action="{{ url('/register') }}">
+      {{ csrf_field() }}
+      <table>
+        <tr>
+          <td>
+            <span class="form col-xs-12 col-sm-12 col-md-12">
+              <span class="col-xs-12 col-sm-12 col-md-6">FULL NAME</span>
+              <input type="text" class="username col-xs-12 col-sm-12 col-md-12" name="name" value="{{ old('name') }}" required autofocus>
+              @if ($errors->has('name'))
+                <span class="help-block">
+                    <strong>{{ $errors->first('name') }}</strong>
+                </span>
+              @endif
+            </span>
+          </td>
+        </tr>
+
+        <tr>
+          <td>
+            <span class="form col-xs-12 col-sm-12 col-md-12">
+              <span class="col-xs-12 col-sm-12 col-md-6">HANDPHONE</span>
+              <input type="text" class="username col-xs-12 col-sm-12 col-md-12" name="nohp" value="{{ old('nohp') }}" required>
+              @if ($errors->has('nohp'))
+                  <span class="help-block">
+                      <strong>{{ $errors->first('nohp') }}</strong>
+                  </span>
+              @endif
+            </span>
+          </td>
+        </tr>
+
+        <tr>
+          <td>
+            <span class="form col-xs-12 col-sm-12 col-md-12">
+              <div class="profession">
+                <span class="col-xs-12 col-sm-12 col-md-12">
+                  PROFESSION     <a href="javascript:void(0)" class="menudown glyphicon glyphicon-menu-down" id="menudown1"></a>
+                </span>
+                <br>
+                <div class="col-xs-12 col-sm-12 col-md-12" id="panel1"> 
+                  <input type="radio" class="username" name="profession" value="Mahasiswa" required> Mahasiswa
+                  <br>
+                  <input type="radio" class="username" name="profession" value="Professional" required> Professional
+                  <br>
+                  <input type="radio" class="username" name="profession" value="Pengusaha" required> Pengusaha
+                  <br>
+                </div>
+              </div>
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span class="form col-xs-12 col-sm-12 col-md-12">
+              <span class="col-xs-12 col-sm-12 col-md-6">E-MAIL</span>
+              <input type="text" class="username col-xs-12 col-sm-12 col-md-12" name="email" value="{{ old('email') }}" required>
+              @if ($errors->has('email'))
+                  <span class="help-block">
+                      <strong>{{ $errors->first('email') }}</strong>
+                  </span>
+              @endif
+            </span>
+          </td>
+        </tr>
+
+        <tr>
+          <td>
+            <span class="form col-xs-12 col-sm-12 col-md-12">
+              <span class="col-xs-12 col-sm-12 col-md-6">PASSWORD</span>
+              <input type="password" class="password col-xs-12 col-sm-12 col-md-12"  name="password" required>
+              @if ($errors->has('password'))
+                  <span class="help-block">
+                      <strong>{{ $errors->first('password') }}</strong>
+                  </span>
+              @endif
+           </span>
+          </td>
+        </tr>
+      
+        <tr>
+          <td>
+            <span class="form col-xs-12 col-sm-12 col-md-12">
+              <span class="col-xs-12 col-sm-12 col-md-6">CONFIRMATION</span>
+              <input type="password" class="password col-xs-12 col-sm-12 col-md-12"  name="password_confirmation" required>
+            </span>
+          </td>
+        </tr>
+      </table>
+      <span class="form col-xs-12 col-sm-12 col-md-12">
+        <span class="col-xs-12 col-sm-12 col-md-6">CAPTCHA</span>
+          <br><?php echo Captcha::img(); ?>
+          <input type="text" name="captcha">
+           @if ($errors->has('g-recaptcha-response'))
+              <span class="help-block">
+                  <strong>{{ $errors->first('g-recaptcha-response') }}</strong>
+              </span>
+           @endif
+      </span>
+
+      <table>
+        <tr>
+          <td>
+            <span class="form col-xs-12 col-sm-12 col-md-12">
+              <input type="submit" id="register" value="REGISTER" class="register-button col-xs-12 col-sm-12 col-md-12" onclick="register()">
+            </span>
+          </td>
+        </tr>
+
+        <tr>
+          <td>
+            <span class="form col-xs-12 col-sm-12 col-md-12">
+              <center>
+                  <a class="forgot col-xs-12 col-sm-12 col-md-12" href="#">Forgot Password?</a><br>
+                  <a class="already col-xs-12 col-sm-12 col-md-12" href="#"" onclick="login()">Already have account?</a>
+              </center>
+            </span>
+          </td>
+        </tr>
+      </table>
+    </form> 
+  </div>
+</div>
 
 <nav class=" header navbar navbar-fixed-top" id="nav">
   <div class="container-fluid">
@@ -271,6 +484,10 @@
 </nav>
 <script>
 var mq = window.matchMedia( "(max-device-width: 568px)" );
+
+$("#menudown1").click(function(){
+  $("#panel1").toggle("slow");
+});
 
 function openNav() {
   if(mq.matches){

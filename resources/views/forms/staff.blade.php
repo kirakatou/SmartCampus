@@ -19,7 +19,7 @@
                 <div class="x_panel">
                   <div class="x_content">
                     <form class="form-horizontal form-label-left" method="POST" 
-                    action="/staff{{ $staff != NULL ? '/' . $staff->id : ''}}" enctype="multipart/form-data">
+                    action="/admin/staff{{ $staff != NULL ? '/' . $staff->id : ''}}" enctype="multipart/form-data">
                     @if(isset($staff))
                           {{ method_field('PUT') }}
                     @endif

@@ -8,7 +8,7 @@ class Event extends Model
 {
     protected $fillable = [
     	'name', 'datetime', 'location', 'type', 'pay', 'price', 'capacity', 'image',
-    	'poster', 'description'
+    	'poster', 'description', 'public'
     ];
 
     protected $dates = ['datetime'];
@@ -16,5 +16,10 @@ class Event extends Model
     public function setPayAttribute($value)
     {
     	$this->attributes['pay'] = (boolean)($value);
+    }
+
+    public function setPublicAttribute($value)
+    {
+    	$this->attributes['public'] = (boolean)($value);
     }
 }

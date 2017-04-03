@@ -15,6 +15,9 @@
     <link href="{{ asset('vendors/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
     <!-- Custom Theme Style -->
     <link href="{{ asset('build/css/custom.min.css') }}" rel="stylesheet">
+    
+    <script src="{{ asset('vendors/sweetalert2/sweetalert2.min.js') }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ asset('vendors/sweetalert2/sweetalert2.css') }}">
     @yield('css') 
   </head>
 
@@ -50,30 +53,29 @@
                 <ul class="nav side-menu">
                   <li><a><i class="fa fa-home"></i>Department <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="{{ url('/department') }}">List</a></li>
-                      <li><a href="{{ url('/department/create') }}">Input Form</a></li>
+                      <li><a href="{{ url('/admin/department') }}">List</a></li>
+                      <li><a href="{{ url('/admin/department/create') }}">Input Form</a></li>
                     </ul>
                   </li>
                   <li><a><i class="fa fa-edit"></i>Student <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="{{ url('/student') }}">List</a></li>
-                      <li><a href="{{ url('/student/create') }}">Input Form</a></li>
+                      <li><a href="{{ url('/admin/student') }}">List</a></li>
+                      <li><a href="{{ url('/admin/student/create') }}">Input Form</a></li>
                     </ul>
                   </li>
                   <li><a><i class="fa fa-desktop"></i>Staff <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="{{ url('/staff') }}">List</a></li>
-                      <li><a href="{{ url('/staff/create') }}">Input Form</a></li>
+                      <li><a href="{{ url('/admin/staff') }}">List</a></li>
+                      <li><a href="{{ url('/admin/staff/create') }}">Input Form</a></li>
                     </ul>
                   </li>
                   <li><a><i class="fa fa-table"></i>Events <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="{{ url('/event') }}">Event List</a></li>
-                      <li><a href="{{ url('/attendance') }}">Event Attendance</a></li>
-                      <li><a href="{{ url('/voucher') }}">Voucher Form</a></li>
+                      <li><a href="{{ url('/admin/event') }}">Event List</a></li>
+                      <li><a href="{{ url('/admin/event/create') }}">Event Input Form</a></li>
+                      <li><a href="{{ url('/admin/attendance') }}">Event Attendance</a></li>
+                      <li><a href="{{ url('/admin/payment') }}">Payment</a></li>
                     </ul>
-                  </li>
-                  <li><a href="/calendar"><i class="fa fa-calendar"></i>Calendar </a>
                   </li>
                 </ul>
               </div>

@@ -29,7 +29,9 @@ class EventController extends Controller
     {
         $departments = Department::All();
         return view('forms/event')->with("event", null)
+                                  ->with('eventfors', null)
                                   ->with("departments", $departments);
+                                  
     }
 
     /**
@@ -46,17 +48,20 @@ class EventController extends Controller
             $path = $file->storeAs('/public/images/images', 
                     $request->name . '-' . date('dmy',strtotime($request->datetime)) 
                     . '.' . $file->getClientOriginalExtension());
-            $event->image = $path;
+            $event->image = '/images/images/' . $request->name . '-' . date('dmy',strtotime($request->datetime)) 
+                                              . '.' . $file->getClientOriginalExtension();
         }
         if ($request->file('poster')) {
             $file = $request->file('poster') ;
             $path = $file->storeAs('/public/images/poster', 
                     $request->name . '-' . date('dmy',strtotime($request->datetime)) 
                     . '.' . $file->getClientOriginalExtension());
-            $event->poster = $path;
+            $event->poster = '/images/poster/' . $request->name . '-' . date('dmy',strtotime($request->datetime)) 
+                                               . '.' . $file->getClientOriginalExtension();
         }
         $event->datetime = date('Y-m-d H:i:s', strtotime($request->datetime));
         $event->save();
+
         if($request->for != null){
             foreach ($request->for as $for) {
                 EventFor::create([
@@ -66,7 +71,7 @@ class EventController extends Controller
             }
         }
         
-        return redirect("/event");;
+        return redirect("/admin/event");;
     }
 
     /**
@@ -77,7 +82,11 @@ class EventController extends Controller
      */
     public function show($id)
     {
-        //
+        $departments = Department::all();
+        $eventfors = EventFor::where('event_id', $id)->get();
+        $event = Event::findOrFail($id);
+        return view('forms/event', compact('event'))->with('departments', $departments)
+                                                    ->with('eventfors', $eventfors);
     }
 
     /**
@@ -88,7 +97,11 @@ class EventController extends Controller
      */
     public function edit($id)
     {
-        //
+        $departments = Department::all();
+        $eventfors = EventFor::where('event_id', $id)->get();
+        $event = Event::findOrFail($id);
+        return view('forms/event')->with("event", $event)->with('departments', $departments)
+                                                         ->with('eventfors', $eventfors);   
     }
 
     /**
@@ -111,6 +124,9 @@ class EventController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $eventfor = EventFor::findOrFail($id);
+        $eventfor->delete();
+        $event = Event::findOrFail($id);
+        $event->delete();
     }
 }

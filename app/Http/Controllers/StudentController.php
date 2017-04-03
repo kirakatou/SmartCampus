@@ -69,7 +69,7 @@ class StudentController extends Controller
         $user->profile_id = $student->id;
         $user->activated = '1';
         $user->save();
-        return Redirect::to('/student');
+        return Redirect::to('/admin/student');
     }
 
     /**
@@ -126,7 +126,7 @@ class StudentController extends Controller
         $student->department_id = $request->department;
         $student->classname = $request->class;
         $student->save();
-        return redirect("/student");
+        return redirect("/admin/student");
     }
 
     /**
@@ -139,6 +139,5 @@ class StudentController extends Controller
     {
         $student = Student::findOrFail($id);
         $student->delete();
-        return redirect("/student");
     }
 }

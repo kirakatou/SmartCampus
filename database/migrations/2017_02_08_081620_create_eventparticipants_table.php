@@ -17,6 +17,7 @@ class CreateEventparticipantsTable extends Migration
             $table->increments('id');
             $table->integer('event_id');
             $table->integer('participant_id');
+            $table->string('status');
             $table->boolean('signin')->default(0);
             $table->datetime('in_time')->nullable();
             $table->boolean('signout')->default(0);

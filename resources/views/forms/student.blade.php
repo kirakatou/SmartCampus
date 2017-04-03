@@ -21,7 +21,7 @@
                 <div class="x_panel">
                   <div class="x_content">
 
-                    <form class="form-horizontal form-label-left" method="POST" action="/student{{ $student != NULL ? '/' . $student->id : ''}}" enctype="multipart/form-data">
+                    <form class="form-horizontal form-label-left" method="POST" action="/admin/student{{ $student != NULL ? '/' . $student->id : ''}}" enctype="multipart/form-data">
                     @if(isset($student))
                           {{ method_field('PUT') }}
                     @endif

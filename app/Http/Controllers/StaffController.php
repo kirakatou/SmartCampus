@@ -69,10 +69,10 @@ class StaffController extends Controller
         User::create([
             'username'      => $staff->sid,
             'password'      => bcrypt(date('dmY',strtotime($staff->birthdate))),
-            'status'        => 'STAFF',
+            'status'        => 'ADMIN',
             'profile_id'    => $staff->id
         ]);
-        return Redirect::to('/staff');
+        return Redirect::to('/admin/staff');
     }
 
     /**
