@@ -42,11 +42,11 @@
                                         Edit
                                     </a>
                                     <button type="button" class="btn btn-danger"
-                                     onclick="javascript:checkDelete({{ $staff->id }});" 
+                                     onclick="checkDelete({{ $staff->id }}, this);" 
                                      data-token="{{ csrf_token() }}">
                                         <i class="glyphicon glyphicon-trash icon-white"></i>
                                         Delete
-                                    </a>
+                                    </button>
                                   </td>
                                 </tr>  
                               @endforeach
@@ -61,16 +61,43 @@
 @stop
 @section('js')
 <!-- Datatables -->
-<script src="vendors/data-table/datatables.net/js/jquery.dataTables.min.js"></script>
-<script src="vendors/data-table/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-<script src="vendors/data-table/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
-<script src="vendors/data-table/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
-<script src="vendors/data-table/datatables.net-scroller/js/datatables.scroller.min.js"></script>  
-<!-- Datatables -->
-    <script>
-      $(document).ready(function() {
-        $('#datatable').dataTable();
-      });
-    </script>
-<!-- /Datatables -->
+<script src="{{ asset('vendors/data-table/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('vendors/data-table/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
+<script src="{{ asset('vendors/data-table/datatables.net-responsive/js/dataTables.responsive.min.js') }}"></script>
+<script src="{{ asset('vendors/data-table/datatables.net-responsive-bs/js/responsive.bootstrap.js') }}"></script>
+<script src="{{ asset('vendors/data-table/datatables.net-scroller/js/datatables.scroller.min.js') }}"></script>  
+<script>
+function checkDelete(id, row) {
+  swal({
+  title: "Are you sure?",
+  text: "You will erase the staff from your database!",
+  type: "warning",
+  showCancelButton: true,
+  confirmButtonColor: "#DD6B55",
+  confirmButtonText: "Yes, delete it!",
+  cancelButtonText: "No, cancel plx!",
+  closeOnConfirm: false,
+  closeOnCancel: false
+},
+
+function(isConfirm){
+  if (isConfirm) {
+    $.ajax({
+    url: 'staff/' + id,
+    type: 'DELETE',
+    data: {
+          "_method": "delete",
+          "_token": "{{ csrf_token() }}",
+          },
+    });
+    console.log(row.closest('tr'));
+    row.closest('tr').remove(); 
+    swal("Deleted!", "The staff has been deleted.", "success");
+  } else {
+    swal("Cancelled", "Cancelled", "error");
+  }
+});
+}
+ 
+</script>
 @stop

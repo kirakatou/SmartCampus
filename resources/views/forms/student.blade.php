@@ -21,7 +21,7 @@
                 <div class="x_panel">
                   <div class="x_content">
 
-                    <form class="form-horizontal form-label-left" method="POST" action="/admin/student{{ $student != NULL ? '/' . $student->id : ''}}" enctype="multipart/form-data">
+                    <form class="form-horizontal form-label-left" method="POST" action="/student{{ $student != NULL ? '/' . $student->id : ''}}" enctype="multipart/form-data">
                     @if(isset($student))
                           {{ method_field('PUT') }}
                     @endif
@@ -133,7 +133,6 @@
 <!-- Select2 -->
 <script src="{{ asset('vendors/select2/dist/js/select2.full.min.js') }}"></script>
 <script type="{{ asset('vendors/jquery/dist/jquery.min.js') }}"></script>
-{{-- <script src="http://code.jquery.com/jquery-latest.min.js"></script> --}}
 <script src="{{ asset('vendors/dist/jquery-editable-select.min.js') }}"></script>
  
     <script>

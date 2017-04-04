@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Department;
 use App\Student;
 use App\User;
+use Alert;
 
 class StudentController extends Controller
 {
@@ -61,15 +62,16 @@ class StudentController extends Controller
         $student->department_id = $request->department;
         $student->classname = $request->class;
         $student->save();
+        Alert::success('Student registered');
 
-        $user = new User($request->except(['username', 'password', 'status', 'profile_id']));
-        $user->username = $student->nim;
-        $user->password = bcrypt(date('dmY',strtotime($student->dob)));
-        $user->status = 'STUDENT';
-        $user->profile_id = $student->id;
-        $user->activated = '1';
-        $user->save();
-        return Redirect::to('/admin/student');
+        User::create([
+            'username'      => $student->nim,
+            'password'      => bcrypt(date('dmY',strtotime($student->dob))),
+            'status'        => 'STUDENT',
+            'profile_id'    => $student->id
+        ]);
+
+        return Redirect::to('/student');
     }
 
     /**
@@ -112,21 +114,18 @@ class StudentController extends Controller
     public function update(Request $request, $id)
     {
         $student = Student::findOrFail($id);
+        $student->fill($request->except(['dob', 'photo']));
         if($request->file('photo')){
             $file = $request->file('photo');
             $path = $file->storeAs('/public/images/photos', 
                     $student->nim . '.' . $file->getClientOriginalExtension());
             $student->image = $path;
         }
-        $student->name = $request->name;
-        $student->gender = $request->gender;
         $student->dob = date('Y-m-d',strtotime($request->dob));
-        $student->email = $request->email;
-        $student->religion = $request->religion;
-        $student->department_id = $request->department;
-        $student->classname = $request->class;
         $student->save();
-        return redirect("/admin/student");
+        DB::table('users')->where('profile_id', '=', $student->id)->update(array('password' => bcrypt(date('dmY',strtotime($student->dob)))));
+        Alert::success('Update success');
+        return redirect("/student");
     }
 
     /**
@@ -139,5 +138,6 @@ class StudentController extends Controller
     {
         $student = Student::findOrFail($id);
         $student->delete();
+        DB::table('users')->where('profile_id', '=', $student->id)->delete();
     }
 }

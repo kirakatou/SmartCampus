@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\DB;
 use App\Staff;
 use App\User;
-use Storage;
+use Alert;
 
 class StaffController extends Controller
 {
@@ -42,37 +42,25 @@ class StaffController extends Controller
      */
     public function store(Request $request)
     {
-        $staff = new Staff($request->except(['sid', 'name', 'gender', 'birthdate']));
+        $staff = new Staff($request->except(['birthdate']));
         if($request->file('image')){
             $file = $request->file('image');
-            $path = $file->storeAs('/public/images/staff', 
-                    $request->name . '.' . $file->getClientOriginalExtension());
-            $staff->image = '/images/staff/' . $request->name . '.' . $file->getClientOriginalExtension();
+            $path = $file->storeAs('/staffPhotos', 
+                    $request->sid . '.' . $file->getClientOriginalExtension());
+            $staff->image = $path;
         }
-        $staff->sid = $request->sid;
-        $staff->name = $request->name;
-        $staff->gender = $request->gender;
         $staff->birthdate = date('Y-m-d',strtotime($request->birthdate));
 
         $staff->save();
-        // $image=$request->file('photo');
-        // $filename=$image->getClientOriginalExtension();
-        // Storage::put('/staffPhotos/' . $request->sid . '.' . $filename,file_get_contents($image->getRealPath()));
+        Alert::success('Staff registered');
 
-        // $staff =  Staff::create([
-        //                 'sid'           => $request->sid,
-        //                 'name'          => $request->name,
-        //                 'gender'        => $request->gender,
-        //                 'birthdate'     => date('Y-m-d',strtotime($request->birthdate)),
-        //                 'image'         => $filename
-        //             ]);
         User::create([
             'username'      => $staff->sid,
             'password'      => bcrypt(date('dmY',strtotime($staff->birthdate))),
-            'status'        => 'ADMIN',
+            'status'        => 'STAFF',
             'profile_id'    => $staff->id
         ]);
-        return Redirect::to('/admin/staff');
+        return Redirect::to('/staff');
     }
 
     /**
@@ -110,10 +98,17 @@ class StaffController extends Controller
     {
 
         $staff = Staff::findOrFail($id);
-        $staff->name = $request->name;
-        $staff->gender = $request->gender;
+        $staff->fill($request->except(['birthdate', 'image']));
+        if($request->file('image')){
+            $file = $request->file('image');
+            $path = $file->storeAs('/staffPhotos', 
+                    $request->sid . '.' . $file->getClientOriginalExtension());
+            $staff->image = $path;
+        }
         $staff->birthdate = date('Y-m-d',strtotime($request->birthdate));
         $staff->save();
+        DB::table('users')->where('profile_id', '=', $staff->id)->update(array('password' => bcrypt(date('dmY',strtotime($staff->birthdate)))));
+        Alert::success('Update success');
         return redirect("/staff");
     }
 
@@ -125,8 +120,8 @@ class StaffController extends Controller
      */
     public function destroy($id)
     {
-        $staff = Staff::findOrFail($id);
-        $staff->delete();
-        return redirect("/staff");
+            $staff = Staff::findOrFail($id);
+            $staff->delete();
+            DB::table('users')->where('profile_id', '=', $staff->id)->delete();
     }
 }

@@ -19,7 +19,7 @@
                 <div class="x_panel">
                   <div class="x_content">
                     <form class="form-horizontal form-label-left" method="POST" 
-                    action="/admin/staff{{ $staff != NULL ? '/' . $staff->id : ''}}" enctype="multipart/form-data">
+                    action="/staff{{ $staff != NULL ? '/' . $staff->id : ''}}" enctype="multipart/form-data">
                     @if(isset($staff))
                           {{ method_field('PUT') }}
                     @endif
@@ -28,7 +28,7 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="sid">SID<span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                          <input type="text" id="sid" name="sid" required="required" class="form-control col-md-7 col-xs-12" value="{{ $staff != NULL ? $staff->sid : ''}}">
+                          <input type="text" id="sid" name="sid" required="required" class="form-control col-md-7 col-xs-12" {{$staff != NULL ? 'disabled' : ''}} value="{{ $staff != NULL ? $staff->sid : ''}}">
                         </div>
                       </div>
                       <div class="item form-group">
@@ -69,6 +69,7 @@
                          
                         </div>
                       </div>
+                      
                       <div class="ln_solid"></div>
                       <div class="form-group">
                         <div class="col-md-6 col-md-offset-3">

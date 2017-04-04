@@ -6,7 +6,7 @@
 <link href="vendors/data-table/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
 @stop
 @section('pageContent')
-		<div class="right_col" role="main">
+    <div class="right_col" role="main">
           <div class="">
             <div class="page-title">
               <div class="title_left">
@@ -14,26 +14,26 @@
               </div>
             </div>
             <div class="clearfix"></div>
-				<div class="row">
-					<div class="col-md-12 col-sm-12 col-xs-12">
-               			<div class="x_panel">
-                  			<div class="x_content">                    
-                    			<table id="datatable" class="table table-striped table-bordered">
-                      				<thead>
-				                        <tr>
-				                          <th>Name</th>
-				                          <th>Date Time</th>
+        <div class="row">
+          <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="x_panel">
+                        <div class="x_content">                    
+                          <table id="datatable" class="table table-striped table-bordered">
+                              <thead>
+                                <tr>
+                                  <th>Name</th>
+                                  <th>Date Time</th>
                                   <th>Location</th>
                                   <th>Capacity</th>
                                   <th>Action</th>
-				                        </tr>
-                      				</thead>
-                      				<tbody>
+                                </tr>
+                              </thead>
+                              <tbody>
                               @foreach($events as $event)
-				                        <tr>
-				                          <td>{{ $event->name }}</td>
-				                          <td>{{ $event->datetime->format('d M Y') }}</td>
-				                          <td>{{ $event->location }}</td>
+                                <tr>
+                                  <td>{{ $event->name }}</td>
+                                  <td>{{ $event->datetime->format('d M Y') }}</td>
+                                  <td>{{ $event->location }}</td>
                                   <td>{{ $event->capacity }}</td>
                                   <td class="center">
                                     <a id="edit" class="btn btn-info" 
@@ -46,16 +46,16 @@
                                      data-token="{{ csrf_token() }}">
                                         <i class="glyphicon glyphicon-trash icon-white"></i>
                                         Delete
-                                    </a>
+                                    </button>
                                   </td>
-				                        </tr>  
+                                </tr>  
                               @endforeach
-				                      </tbody>
-                    			</table>
-                  			</div>
-                		</div>
-              		</div>
-              	</div>
+                              </tbody>
+                          </table>
+                        </div>
+                    </div>
+                  </div>
+                </div>
             </div>
         </div>
 @stop
@@ -68,25 +68,35 @@
   <script src="vendors/data-table/datatables.net-scroller/js/datatables.scroller.min.js"></script>  
 <script>
 function checkDelete(id, row) {
-  if(confirm('Really delete?')) {
-    var request = $.ajax({
-      url: 'event/' + id,
-      type: 'DELETE',
-      data: {
-            "_method": "delete",
-            "_token": "{{ csrf_token() }}",
-            },
+  swal({
+  title: "Are you sure?",
+  text: "You will erase the event from your database!",
+  type: "warning",
+  showCancelButton: true,
+  confirmButtonColor: "#DD6B55",
+  confirmButtonText: "Yes, delete it!",
+  cancelButtonText: "No, cancel plx!",
+  closeOnConfirm: false,
+  closeOnCancel: false
+},
+
+function(isConfirm){
+  if (isConfirm) {
+    $.ajax({
+    url: 'event/' + id,
+    type: 'DELETE',
+    data: {
+          "_method": "delete",
+          "_token": "{{ csrf_token() }}",
+          },
     });
-           
-    request.done(function() {
-      console.log(row.closest('tr'));
-      row.closest('tr').remove(); 
-    });
-           
-    request.fail(function( jqXHR, textStatus ) {
-      alert( "Request failed: " + textStatus );
-    });
+    console.log(row.closest('tr'));
+    row.closest('tr').remove(); 
+    swal("Deleted!", "The event has been deleted.", "success");
+  } else {
+    swal("Cancelled", "Cancelled", "error");
   }
+});
 }
 </script>
 @stop

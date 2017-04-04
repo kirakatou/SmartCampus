@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Department;
+use Alert;
 
 class DepartmentController extends Controller
 {
@@ -37,7 +38,8 @@ class DepartmentController extends Controller
     public function store(Request $request)
     {
         Department::create($request->all());
-        return redirect("/admin/department");
+        Alert::success('Department registered!');
+        return redirect("/department");
     }
 
     /**
@@ -62,7 +64,7 @@ class DepartmentController extends Controller
     public function edit($id)
     {
         $department = Department::findOrFail($id);
-        return view('forms/department')->with("department", $department);;
+        return view('forms/department')->with("department", $department);
     }
 
     /**
@@ -76,7 +78,8 @@ class DepartmentController extends Controller
     {
         $department = Department::findOrFail($id);
         $department->fill($request->all())->save();
-        return redirect("/admin/department");
+        Alert::success('Update success');
+        return redirect("/department");
         //
     }
 

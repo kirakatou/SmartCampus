@@ -20,7 +20,10 @@
                 <div class="x_panel">
                   <div class="x_content">
                     <form class="form-horizontal form-label-left" method="POST" 
-                     action="{{ url('/admin/event') }}" enctype="multipart/form-data">
+                     action="/event{{ $event != NULL ? '/' . $event->id : '' }}" enctype="multipart/form-data">
+                      @if(isset($event))
+                          {{ method_field('PUT') }}
+                      @endif
                       {{ csrf_field() }}
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Type <span class="required">*</label>
@@ -59,7 +62,7 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Date Time <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                          <input id="birthday" name="datetime" class="date-picker form-control col-md-7 col-xs-12" required="required" type="text" value="{{$event != NULL ? $event->datetime->format('Y-m-d H:i:s') : ''}}">
+                          <input id="birthday" name="datetime" class="date-picker form-control col-md-7 col-xs-12" required="required" type="text" value="{{$event != NULL ? $event->datetime->format('d-m-Y H:i:s') : ''}}">
                         </div>
                       </div>
                       <div class="item form-group">
@@ -74,19 +77,24 @@
                         </label>
                           <div class="checkbox col-md-6 col-sm-6 col-xs-12">
                             <select name="for[]" id="for" class="select2_multiple col-md-10 col-sm-10 col-xs-12" multiple>
+                              
                               @foreach($departments as $department)
-                              <option value="{{ $department->id }}"
-                              @if($eventfors != null)
-                                @foreach($eventfors as $eventfor)
-                                 {{ $event != NULL ? ($department->id == $eventfor->department_id ? 'multiple' : '') : ''}}
-                                @endforeach
-                              @endif
-                              >{{ $department->name }}
-                              </option>
+                                <?php $a = 0; ?>
+                                @if($eventfors != null)
+                                  @foreach($eventfors as $eventfor)
+                                    @if($department->id == $eventfor->department_id)
+                                      <?php $a = 1; ?>
+                                      <option value="{{ $department->id }}" {{ $event != NULL ? ($department->id == $eventfor->department_id ? 'selected' : '') : ''}}> {{ $department->name }} </option>
+                                    @endif
+                                  @endforeach
+                                @endif
+                                @if($a != 1)
+                                  <option value="{{ $department->id }}"> {{ $department->name }} </option>
+                                @endif
                               @endforeach
                             </select>
                             <label>
-                              <input type="checkbox" name="public" 
+                              <input type="checkbox" name="for" 
                                   onclick="
                                   if(this.checked) {
                                     document.getElementById('for').disabled = true;
