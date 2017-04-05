@@ -1,9 +1,7 @@
 @extends('layouts.template')
 @section('css')
-<link href="{{ asset('vendors/data-table/datatables.net-bs/css/dataTables.bootstrap.min.css') }}" rel="stylesheet">
-<link href="{{ asset('vendors/data-table/datatables.net-buttons-bs/css/buttons.bootstrap.min.css') }}" rel="stylesheet">
-<link href="{{ asset('vendors/data-table/datatables.net-responsive-bs/css/responsive.bootstrap.min.css') }}" rel="stylesheet">
-<link href="{{ asset('vendors/data-table/datatables.net-scroller-bs/css/scroller.bootstrap.min.css') }}" rel="stylesheet">
+<!-- DataTables -->
+<link rel="stylesheet" href="{{ asset('vendors/datatables/dataTables.bootstrap.css') }}">
 @stop
 @section('pageContent')
     <div class="right_col" role="main">
@@ -62,13 +60,15 @@
         </div>
 @stop
 @section('js')
-<!-- Datatables -->
-<script src="{{ asset('vendors/data-table/datatables.net/js/jquery.dataTables.min.js') }}"></script> --}}
-<script src="{{ asset('vendors/data-table/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
-<script src="{{ asset('vendors/data-table/datatables.net-responsive/js/dataTables.responsive.min.js') }} "></script>
-<script src="{{ asset('vendors/data-table/datatables.net-responsive-bs/js/responsive.bootstrap.js') }}"></script>
-<script src="{{ asset('vendors/data-table/datatables.net-scroller/js/datatables.scroller.min.js') }}"></script>
-<!-- Datatables -->
+<!-- DataTables -->
+<script src="{{ asset('vendors/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('vendors/datatables/dataTables.bootstrap.min.js') }}"></script>
+
+<script>
+  $(function () {
+    $("#datatable").DataTable();
+  });
+</script>
 <script>
 function checkDelete(id, row) {
   swal({
